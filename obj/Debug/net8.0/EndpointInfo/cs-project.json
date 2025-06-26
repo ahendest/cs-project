@@ -18,7 +18,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/FuelPrice"
+                    "$ref": "#/components/schemas/FuelPriceDTO"
                   }
                 }
               },
@@ -26,7 +26,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/FuelPrice"
+                    "$ref": "#/components/schemas/FuelPriceDTO"
                   }
                 }
               },
@@ -34,7 +34,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/FuelPrice"
+                    "$ref": "#/components/schemas/FuelPriceDTO"
                   }
                 }
               }
@@ -50,17 +50,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/FuelPrice"
+                "$ref": "#/components/schemas/FuelPriceCreateDTO"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/FuelPrice"
+                "$ref": "#/components/schemas/FuelPriceCreateDTO"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/FuelPrice"
+                "$ref": "#/components/schemas/FuelPriceCreateDTO"
               }
             }
           }
@@ -94,17 +94,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/FuelPrice"
+                  "$ref": "#/components/schemas/FuelPriceDTO"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/FuelPrice"
+                  "$ref": "#/components/schemas/FuelPriceDTO"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/FuelPrice"
+                  "$ref": "#/components/schemas/FuelPriceDTO"
                 }
               }
             }
@@ -130,17 +130,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/FuelPrice"
+                "$ref": "#/components/schemas/FuelPriceCreateDTO"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/FuelPrice"
+                "$ref": "#/components/schemas/FuelPriceCreateDTO"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/FuelPrice"
+                "$ref": "#/components/schemas/FuelPriceCreateDTO"
               }
             }
           }
@@ -230,17 +230,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Pump"
+                "$ref": "#/components/schemas/PumpCreateDTO"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/Pump"
+                "$ref": "#/components/schemas/PumpCreateDTO"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/Pump"
+                "$ref": "#/components/schemas/PumpCreateDTO"
               }
             }
           }
@@ -327,17 +327,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Pump"
+                "$ref": "#/components/schemas/PumpCreateDTO"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/Pump"
+                "$ref": "#/components/schemas/PumpCreateDTO"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/Pump"
+                "$ref": "#/components/schemas/PumpCreateDTO"
               }
             }
           }
@@ -383,7 +383,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Transaction"
+                    "$ref": "#/components/schemas/TransactionsDTO"
                   }
                 }
               },
@@ -391,7 +391,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Transaction"
+                    "$ref": "#/components/schemas/TransactionsDTO"
                   }
                 }
               },
@@ -399,7 +399,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Transaction"
+                    "$ref": "#/components/schemas/TransactionsDTO"
                   }
                 }
               }
@@ -415,17 +415,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Transaction"
+                "$ref": "#/components/schemas/TransactionsCreateDTO"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/Transaction"
+                "$ref": "#/components/schemas/TransactionsCreateDTO"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/Transaction"
+                "$ref": "#/components/schemas/TransactionsCreateDTO"
               }
             }
           }
@@ -436,17 +436,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/Transaction"
+                  "$ref": "#/components/schemas/TransactionsDTO"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Transaction"
+                  "$ref": "#/components/schemas/TransactionsDTO"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Transaction"
+                  "$ref": "#/components/schemas/TransactionsDTO"
                 }
               }
             }
@@ -476,17 +476,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/Transaction"
+                  "$ref": "#/components/schemas/TransactionsDTO"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Transaction"
+                  "$ref": "#/components/schemas/TransactionsDTO"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Transaction"
+                  "$ref": "#/components/schemas/TransactionsDTO"
                 }
               }
             }
@@ -512,17 +512,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Transaction"
+                "$ref": "#/components/schemas/TransactionsCreateDTO"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/Transaction"
+                "$ref": "#/components/schemas/TransactionsCreateDTO"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/Transaction"
+                "$ref": "#/components/schemas/TransactionsCreateDTO"
               }
             }
           }
@@ -558,13 +558,9 @@
   },
   "components": {
     "schemas": {
-      "FuelPrice": {
+      "FuelPriceCreateDTO": {
         "type": "object",
         "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int32"
-          },
           "fuelType": {
             "type": "string",
             "nullable": true
@@ -576,6 +572,20 @@
           "updatedAt": {
             "type": "string",
             "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "FuelPriceDTO": {
+        "type": "object",
+        "properties": {
+          "fuelType": {
+            "type": "string",
+            "nullable": true
+          },
+          "currentPrice": {
+            "type": "number",
+            "format": "double"
           }
         },
         "additionalProperties": false
@@ -602,13 +612,27 @@
         },
         "additionalProperties": false
       },
-      "Transaction": {
+      "PumpCreateDTO": {
         "type": "object",
         "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int32"
+          "fuelType": {
+            "type": "string",
+            "nullable": true
           },
+          "currentVolume": {
+            "type": "number",
+            "format": "double"
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "TransactionsCreateDTO": {
+        "type": "object",
+        "properties": {
           "pumpId": {
             "type": "integer",
             "format": "int32"
@@ -631,6 +655,28 @@
           },
           "pump": {
             "$ref": "#/components/schemas/Pump"
+          }
+        },
+        "additionalProperties": false
+      },
+      "TransactionsDTO": {
+        "type": "object",
+        "properties": {
+          "pumpId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "liters": {
+            "type": "number",
+            "format": "double"
+          },
+          "pricePerLiter": {
+            "type": "number",
+            "format": "double"
+          },
+          "totalPrice": {
+            "type": "number",
+            "format": "double"
           }
         },
         "additionalProperties": false

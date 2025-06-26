@@ -9,7 +9,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.List\u00601[[cs_project.Models.FuelPrice, cs-project, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "System.Collections.Generic.List\u00601[[cs_project.Core.DTOs.FuelPriceDTO, cs-project.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -28,8 +28,8 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "fuelPrice",
-        "Type": "cs_project.Models.FuelPrice",
+        "Name": "dto",
+        "Type": "cs_project.Core.DTOs.FuelPriceCreateDTO",
         "IsRequired": true
       }
     ],
@@ -51,7 +51,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "cs_project.Models.FuelPrice",
+        "Type": "cs_project.Core.DTOs.FuelPriceDTO",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -75,8 +75,8 @@
         "IsRequired": true
       },
       {
-        "Name": "updatedFuelPrice",
-        "Type": "cs_project.Models.FuelPrice",
+        "Name": "dto",
+        "Type": "cs_project.Core.DTOs.FuelPriceCreateDTO",
         "IsRequired": true
       }
     ],
@@ -118,7 +118,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[cs_project.Models.Pump, cs-project, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[cs_project.Core.Entities.Pump, cs-project.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -137,14 +137,14 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "pump",
-        "Type": "cs_project.Models.Pump",
+        "Name": "createDto",
+        "Type": "cs_project.Core.DTOs.PumpCreateDTO",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "cs_project.Models.Pump",
+        "Type": "cs_project.Core.Entities.Pump",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -170,7 +170,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "cs_project.Models.Pump",
+        "Type": "cs_project.Core.Entities.Pump",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -194,8 +194,8 @@
         "IsRequired": true
       },
       {
-        "Name": "updatedPump",
-        "Type": "cs_project.Models.Pump",
+        "Name": "updateDto",
+        "Type": "cs_project.Core.DTOs.PumpCreateDTO",
         "IsRequired": true
       }
     ],
@@ -227,7 +227,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[cs_project.Models.Transaction, cs-project, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[cs_project.Core.DTOs.TransactionsDTO, cs-project.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -246,14 +246,14 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "transaction",
-        "Type": "cs_project.Models.Transaction",
+        "Name": "dto",
+        "Type": "cs_project.Core.DTOs.TransactionsCreateDTO",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "cs_project.Models.Transaction",
+        "Type": "cs_project.Core.DTOs.TransactionsDTO",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -279,7 +279,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "cs_project.Models.Transaction",
+        "Type": "cs_project.Core.DTOs.TransactionsDTO",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -303,8 +303,8 @@
         "IsRequired": true
       },
       {
-        "Name": "updatedTransaction",
-        "Type": "cs_project.Models.Transaction",
+        "Name": "dto",
+        "Type": "cs_project.Core.DTOs.TransactionsCreateDTO",
         "IsRequired": true
       }
     ],

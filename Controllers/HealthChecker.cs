@@ -1,4 +1,4 @@
-﻿using cs_project.Data;
+﻿using cs_project.Infrastructure.Data;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 

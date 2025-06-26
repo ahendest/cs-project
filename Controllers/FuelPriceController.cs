@@ -1,9 +1,9 @@
-﻿using cs_project.Data;
-using cs_project.Models;
+﻿using cs_project.Infrastructure.Data;
+using cs_project.Core.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using AutoMapper;
+using cs_project.Core.DTOs;
 
 namespace cs_project.Controllers
 {
@@ -12,47 +12,49 @@ namespace cs_project.Controllers
     public class FuelPriceController : ControllerBase
     {
         private readonly AppDbContext _context;
+        private readonly IMapper _mapper;
 
-        public FuelPriceController(AppDbContext context)
+        public FuelPriceController(AppDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<FuelPrice>>> GetAllFuelPrices()
+        public async Task<ActionResult<List<FuelPriceDTO>>> GetAllFuelPrices()
         {
-            return await _context.FuelPrices.ToListAsync();
+            var data = await _context.FuelPrices.ToListAsync();
+            return Ok(_mapper.Map<List<FuelPriceDTO>>(data));
 
         }
         
         [HttpGet("{id}")]
-        public async Task<ActionResult<FuelPrice>> GetFuelPrice(int id)
+        public async Task<ActionResult<FuelPriceDTO>> GetFuelPrice(int id)
         {
             var fuelPrice = await _context.FuelPrices.FindAsync(id);
             if (fuelPrice == null) return NotFound();
-            return Ok(id);
+            return Ok(_mapper.Map<FuelPriceDTO>(fuelPrice));
         }
 
         [HttpPost]
-        public async Task<ActionResult> CreateFuelPrice([FromBody] FuelPrice fuelPrice)
+        public async Task<ActionResult> CreateFuelPrice([FromBody] FuelPriceCreateDTO dto)
         {
-            _context.FuelPrices.Add(fuelPrice);
+            var price = _mapper.Map<FuelPrice>(dto);
+            _context.FuelPrices.Add(price);
             await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetFuelPrice), new {id = fuelPrice.Id}, fuelPrice);
+            return CreatedAtAction(nameof(GetFuelPrice), new {id = price.Id}, _mapper.Map<FuelPriceDTO>(price));
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateFuelPrice(int id, [FromBody] FuelPrice updatedFuelPrice)
+        public async Task<IActionResult> UpdateFuelPrice(int id, [FromBody] FuelPriceCreateDTO dto)
         {
-            var fuelPrice = await _context.FuelPrices.FindAsync(id);
-            if (fuelPrice == null) return NotFound();
-
-            fuelPrice.FuelType = updatedFuelPrice.FuelType;
-            fuelPrice.CurrentPrice = updatedFuelPrice.CurrentPrice;
-            fuelPrice.UpdatedAt = updatedFuelPrice.UpdatedAt;
+            var price = await _context.FuelPrices.FindAsync(id);
+            if (price == null) return NotFound();
+            
+            _mapper.Map(dto, price);
 
             await _context.SaveChangesAsync();
-            return Ok(fuelPrice);
+            return Ok(price);
 
 
         }
