@@ -54,5 +54,6 @@ namespace cs_project.Infrastructure.Services
             _pumpRepository.Delete(pump);
             return await _pumpRepository.SaveChangesAsync();
         }
+
     }
 }

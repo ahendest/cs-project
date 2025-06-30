@@ -1,76 +1,53 @@
-﻿using cs_project.Infrastructure.Data;
-using cs_project.Core.Entities;
+﻿using cs_project.Core.DTOs;
+using cs_project.Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using AutoMapper;
-using cs_project.Core.DTOs;
 
 [ApiController]
 [Route("api/[controller]")]
 public class TransactionController : ControllerBase
 {
-    private readonly AppDbContext _context;
-    private readonly IMapper _mapper;
+    private readonly ITransactionService _transactionService;
 
-    public TransactionController(AppDbContext context, IMapper mapper)
+    public TransactionController(ITransactionService transactionService)
     {
-        _context = context;
-        _mapper = mapper;
+        _transactionService = transactionService;
     }
 
     [HttpGet]
     public async Task<ActionResult<IEnumerable<TransactionsDTO>>> GetAllTransactions()
     {
-        var data = await _context.Transactions.ToListAsync();
-        return Ok(_mapper.Map<List<TransactionsDTO>>(data));
+        var transactions = await _transactionService.GetAllAsync();
+
+        return Ok(transactions);
     }
 
     [HttpGet("{id}")]
     public async Task<ActionResult<TransactionsDTO>> GetTransaction(int id)
     {
-        var transaction = await _context.Transactions.FindAsync(id);
-        if (transaction == null) return NotFound();
-        return Ok(_mapper.Map<TransactionsDTO>(transaction));
+        var transaction = await _transactionService.GetByIdAsync(id);
+
+        return Ok(transaction);
     }
 
     [HttpPost]
     public async Task<ActionResult<TransactionsDTO>> CreateTransaction([FromBody] TransactionsCreateDTO dto)
     {
-        var transaction = _mapper.Map<Transaction>(dto);
-        transaction.TotalPrice = dto.Liters * dto.PricePerLiter;
-        transaction.Timestamp = DateTime.UtcNow;
-
-        _context.Transactions.Add(transaction);
-        await _context.SaveChangesAsync();
-
-        return CreatedAtAction(nameof(GetTransaction), new { id = transaction.Id }, _mapper.Map<TransactionsDTO>(transaction));
+        var createdTransactionDto = await _transactionService.CreateAsync(dto);
+        return CreatedAtAction(nameof(GetTransaction), new { id = createdTransactionDto.Id }, createdTransactionDto);
     }
 
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateTransaction(int id, [FromBody] TransactionsCreateDTO dto)
     {
-        var transaction = await _context.Transactions.FindAsync(id);
-        if (transaction == null) return NotFound();
+        var updatedTransaction = await _transactionService.UpdateAsync(id, dto);
 
-        var price = await _context.FuelPrices.FindAsync(id);
-        if (price == null) return NotFound();
-
-        _mapper.Map(dto, price);
-        await _context.SaveChangesAsync();
-        return NoContent();
+        return updatedTransaction ? NoContent() : NotFound();
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteTransaction(int id)
     {
-        var transaction = await _context.Transactions.FindAsync(id);
-        if (transaction == null) return NotFound();
-
-        _context.Transactions.Remove(transaction);
-        await _context.SaveChangesAsync();
-        return NoContent();
-
+        var deletedTransaction = await _transactionService.DeleteAsync(id);
+        return deletedTransaction ? NoContent() : NotFound();
     }
 }

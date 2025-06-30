@@ -6,26 +6,26 @@ namespace cs_project.Infrastructure.Repositories
 {
     public class TransactionRepository : ITransactionRepository
     {
-        private readonly AppDbContext _context;
+        private readonly AppDbContext _transactionService;
 
-        public TransactionRepository(AppDbContext context) => _context = context;
+        public TransactionRepository(AppDbContext transactionService) => _transactionService = transactionService;
 
         public async Task<IEnumerable<Transaction>> GetAllAsync() =>
-            await _context.Transactions.ToListAsync();
+            await _transactionService.Transactions.ToListAsync();
 
         public async Task<Transaction?> GetByIdAsync(int id) =>
-            await _context.Transactions.FindAsync(id);
+            await _transactionService.Transactions.FindAsync(id);
 
         public async Task AddAsync(Transaction transaction) =>
-            await _context.Transactions.AddAsync(transaction);
+            await _transactionService.Transactions.AddAsync(transaction);
 
         public void Update(Transaction transaction) =>
-            _context.Transactions.Update(transaction);
+            _transactionService.Transactions.Update(transaction);
 
         public void Delete(Transaction transaction) =>
-            _context.Transactions.Remove(transaction);
+            _transactionService.Transactions.Remove(transaction);
 
-        public async Task SaveChangesAsync() =>
-            await _context.SaveChangesAsync();
+        public async Task<bool> SaveChangesAsync() =>
+            await _transactionService.SaveChangesAsync() > 0;
     }
 }

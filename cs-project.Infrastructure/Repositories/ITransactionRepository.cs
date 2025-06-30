@@ -9,6 +9,6 @@ namespace cs_project.Infrastructure.Repositories
         Task AddAsync(Transaction transaction);
         void Update(Transaction transaction);
         void Delete(Transaction transaction);
-        Task SaveChangesAsync();
+        Task<bool>SaveChangesAsync();
     }
 }

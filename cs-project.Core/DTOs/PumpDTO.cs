@@ -11,5 +11,6 @@ namespace cs_project.Core.DTOs
         public string FuelType { get; set; } = string.Empty;
         public double CurrentVolume { get; set; }
         public string Status { get; set; } = "Idle";
+        public required object Id { get; set; }
     }
 }

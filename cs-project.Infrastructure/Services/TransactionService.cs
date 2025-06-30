@@ -36,15 +36,14 @@ namespace cs_project.Infrastructure.Services
             return _mapper.Map<TransactionsDTO>(transaction);
         }
 
-        public async Task<TransactionsDTO?> UpdateAsync(int id, TransactionsCreateDTO transactionDto)
+        public async Task<bool> UpdateAsync(int id, TransactionsCreateDTO transactionDto)
         {
             var existingTransaction = await _transactionRepository.GetByIdAsync(id);
-            if (existingTransaction == null) return null;
+            if (existingTransaction == null) return false;
 
             _mapper.Map(transactionDto, existingTransaction);
             _transactionRepository.Update(existingTransaction);
-            await _transactionRepository.SaveChangesAsync();
-            return _mapper.Map<TransactionsDTO>(existingTransaction);
+            return await _transactionRepository.SaveChangesAsync();
         }
 
         public async Task<bool> DeleteAsync(int id)
@@ -53,8 +52,8 @@ namespace cs_project.Infrastructure.Services
             if (transaction == null) return false;
 
             _transactionRepository.Delete(transaction);
-            await _transactionRepository.SaveChangesAsync();
-            return true;
+            
+            return await _transactionRepository.SaveChangesAsync();
         }
     }
 }
