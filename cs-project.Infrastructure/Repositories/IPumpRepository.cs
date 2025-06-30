@@ -1,6 +1,4 @@
 ﻿using cs_project.Core.Entities;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace cs_project.Infrastructure.Repositories
 {

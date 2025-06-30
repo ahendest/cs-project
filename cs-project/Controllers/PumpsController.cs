@@ -1,12 +1,6 @@
-﻿using AutoMapper;
-using cs_project.Core.DTOs;
-using cs_project.Core.Entities;
-using cs_project.Infrastructure.Data;
+﻿using cs_project.Core.DTOs;
 using cs_project.Infrastructure.Services;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace cs_project.Controllers
 {
@@ -15,63 +9,47 @@ namespace cs_project.Controllers
     public class PumpsController : ControllerBase
     {
         private readonly IPumpService _pumpService;
-        private readonly IMapper _mapper;
 
-        public PumpsController(IPumpService pumpService, IMapper mapper)
+        public PumpsController(IPumpService pumpService)
         {
             _pumpService = pumpService;
-            _mapper = mapper;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Pump>>> GetAllPumps()
+        public async Task<ActionResult<IEnumerable<PumpDTO>>> GetAllPumps()
         {
-            var pumps = await _pumpService.Pumps.ToListAsync();
-            var result = _mapper.Map<List<PumpDTO>>(pumps);
-            return Ok(result);
+            var pumps = await _pumpService.GetAllPumpsAsync();
+            return Ok(pumps);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Pump>> GetPump(int id)
+        public async Task<ActionResult<PumpDTO>> GetPump(int id)
         {
-            var pump = await _context.Pumps.FindAsync(id);
+            var pump = await _pumpService.GetPumpByIdAsync(id);
             if (pump == null) return NotFound();
-            var dto = _mapper.Map<PumpDTO>(pump);
-            return Ok(dto);
+            return Ok(pump);
         }
 
         [HttpPost]
-        public async Task<ActionResult<Pump>> CreatePump([FromBody] PumpCreateDTO createDto)
+        public async Task<ActionResult<PumpDTO>> CreatePump([FromBody] PumpCreateDTO createDto)
         {
-            var pump = _mapper.Map<Pump>(createDto);
-            _context.Pumps.Add(pump);
-            await _context.SaveChangesAsync();
+            var pumpDto = await _pumpService.CreatePumpAsync(createDto);
 
-            var pumpDto = _mapper.Map<PumpDTO>(pump);
-            return CreatedAtAction(nameof(GetPump), new { id = pump.Id }, pumpDto);
+            return CreatedAtAction(nameof(GetPump), new { id = pumpDto.Id }, pumpDto);
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdatePump(int id, [FromBody] PumpCreateDTO updateDto)
         {
-            var pump = await _context.Pumps.FindAsync(id);
-            if (pump == null) return NotFound();
+            var pump = await _pumpService.UpdatePumpAsync(id, updateDto);
 
-            _mapper.Map(updateDto, pump);
-
-            await _context.SaveChangesAsync();
-            return Ok(pump);
+            return pump ? NoContent() : NotFound();
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePump(int id)
         {
-            var pump = await _context.Pumps.FindAsync(id);
-            if (pump == null) return NotFound();
-
-            _context.Pumps.Remove(pump);
-            await _context.SaveChangesAsync();
-
+            await _pumpService.DeletePumpAsync(id);
             return NoContent();
         }
     }

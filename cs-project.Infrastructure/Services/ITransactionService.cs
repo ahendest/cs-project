@@ -7,7 +7,7 @@ namespace cs_project.Infrastructure.Services
         Task<IEnumerable<TransactionsDTO>> GetAllAsync();
         Task<TransactionsDTO?> GetByIdAsync(int id);
         Task<TransactionsDTO> CreateAsync(TransactionsCreateDTO transactionDto);
-        Task<TransactionsDTO?> UpdateAsync(int id, TransactionsCreateDTO transactionDto);
+        Task<bool> UpdateAsync(int id, TransactionsCreateDTO transactionDto);
         Task<bool> DeleteAsync(int id);
     }
 }
