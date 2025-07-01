@@ -2,7 +2,7 @@
 {
     public class TransactionsDTO
     {
-        public required object Id { get; set; }
+        public int Id { get; set; }
         public int PumpId { get; set; }
         public double Liters { get; set; }
         public double PricePerLiter { get; set; }

@@ -9,10 +9,16 @@ using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddAutoMapper(typeof(MappingProfile));
+
 builder.Services.AddScoped<IPumpRepository, PumpRepository>();
 builder.Services.AddScoped<IPumpService, PumpService>();
+
 builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 builder.Services.AddScoped<ITransactionService, TransactionService>();
+
+builder.Services.AddScoped<IFuelPriceRepository, FuelPriceRepository>();
+builder.Services.AddScoped<IFuelPriceRepository, FuelPriceRepository>();
+
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
