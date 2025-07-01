@@ -2,3 +2,4 @@
 bin/
 obj/
 *.user
+dotnet-install.sh
