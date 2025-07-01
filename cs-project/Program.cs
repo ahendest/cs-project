@@ -17,7 +17,7 @@ builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 builder.Services.AddScoped<ITransactionService, TransactionService>();
 
 builder.Services.AddScoped<IFuelPriceRepository, FuelPriceRepository>();
-builder.Services.AddScoped<IFuelPriceRepository, FuelPriceRepository>();
+builder.Services.AddScoped<IFuelPriceService, FuelPriceService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
