@@ -22,6 +22,18 @@ public class TransactionControllerTests
     }
 
     [Fact]
+    public async Task UpdateTransaction_ReturnsNoContent_WhenTrue()
+    {
+        var service = new Mock<ITransactionService>();
+        service.Setup(s => s.UpdateAsync(1, It.IsAny<TransactionsCreateDTO>())).ReturnsAsync(true);
+        var controller = new TransactionController(service.Object);
+
+        var result = await controller.UpdateTransaction(1, new TransactionsCreateDTO());
+
+        Assert.IsType<NoContentResult>(result);
+    }
+
+    [Fact]
     public async Task CreateTransaction_ReturnsCreated()
     {
         var service = new Mock<ITransactionService>();
@@ -31,5 +43,17 @@ public class TransactionControllerTests
         var result = await controller.CreateTransaction(new TransactionsCreateDTO());
 
         Assert.IsType<CreatedAtActionResult>(result.Result);
+    }
+
+    [Fact]
+    public async Task DeleteTransaction_ReturnsNotFound_WhenServiceReturnsFalse()
+    {
+        var service = new Mock<ITransactionService>();
+        service.Setup(s => s.DeleteAsync(1)).ReturnsAsync(false);
+        var controller = new TransactionController(service.Object);
+
+        var result = await controller.DeleteTransaction(1);
+
+        Assert.IsType<NotFoundResult>(result);
     }
 }

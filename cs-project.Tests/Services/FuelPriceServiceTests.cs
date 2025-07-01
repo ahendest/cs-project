@@ -60,4 +60,14 @@ public class FuelPriceServiceTests
         repo.Verify();
         Assert.Equal("A", result.FuelType);
     }
+
+    [Fact]
+    public async Task CreateAsync_Throws_WhenRepositoryFails()
+    {
+        var repo = new Mock<IFuelPriceRepository>();
+        repo.Setup(r => r.AddAsync(It.IsAny<FuelPrice>())).ThrowsAsync(new InvalidOperationException());
+        var service = new FuelPriceService(repo.Object, _mapper);
+
+        await Assert.ThrowsAsync<InvalidOperationException>(() => service.CreateAsync(new FuelPriceCreateDTO()));
+    }
 }

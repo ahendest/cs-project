@@ -34,8 +34,10 @@ namespace cs_project.Controllers
         [HttpPost]
         public async Task<ActionResult<FuelPriceDTO>> CreateFuelPrice([FromBody] FuelPriceCreateDTO dto)
         {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
             var createdPrice = await _fuelPriceService.CreateAsync(dto);
-            
+
             return CreatedAtAction(nameof(GetFuelPrice), new {id = createdPrice.Id}, createdPrice);
         }
 
