@@ -32,4 +32,30 @@ public class FuelPriceControllerTests
 
         Assert.IsType<CreatedAtActionResult>(result.Result);
     }
-} 
+
+    [Fact]
+    public async Task GetFuelPrice_ReturnsOk_WhenFound()
+    {
+        var service = new Mock<IFuelPriceService>();
+        service.Setup(s => s.GetByIdAsync(1)).ReturnsAsync(new FuelPriceDTO { Id = 1 });
+        var controller = new FuelPriceController(service.Object);
+
+        var result = await controller.GetFuelPrice(1);
+
+        var okResult = Assert.IsType<OkObjectResult>(result.Result);
+        var dto = Assert.IsType<FuelPriceDTO>(okResult.Value);
+        Assert.Equal(1, dto.Id);
+    }
+
+    [Fact]
+    public async Task CreateFuelPrice_ReturnsBadRequest_WhenModelInvalid()
+    {
+        var service = new Mock<IFuelPriceService>();
+        var controller = new FuelPriceController(service.Object);
+        controller.ModelState.AddModelError("FuelType", "Required");
+
+        var result = await controller.CreateFuelPrice(new FuelPriceCreateDTO());
+
+        Assert.IsType<BadRequestObjectResult>(result.Result);
+    }
+}
