@@ -7,9 +7,9 @@ namespace cs_project.Infrastructure.Services
 {
     public class FuelPriceService : IFuelPriceService
     {
-        private readonly FuelPriceRepository _fuelPriceRepository;
+        private readonly IFuelPriceRepository _fuelPriceRepository;
         private readonly IMapper _mapper;
-        public FuelPriceService(FuelPriceRepository fuelPriceRepository, IMapper mapper)
+        public FuelPriceService(IFuelPriceRepository fuelPriceRepository, IMapper mapper)
         {
             _fuelPriceRepository = fuelPriceRepository;
             _mapper = mapper;
