@@ -32,4 +32,4 @@ public class FuelPriceControllerTests
 
         Assert.IsType<CreatedAtActionResult>(result.Result);
     }
-}
+} 
