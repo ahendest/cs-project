@@ -2,11 +2,21 @@ using cs_project.Infrastructure.Data;
 using cs_project.Infrastructure.Mapping;
 using cs_project.Infrastructure.Repositories;
 using cs_project.Infrastructure.Services;
+using cs_project.Validators;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddFluentValidationClientsideAdapters();
+
+
+builder.Services.AddValidatorsFromAssemblyContaining<PumpCreateDTOValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<TransactionCreateDTOValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<FuelPriceCreateDTOValidator>();
 
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
