@@ -9,17 +9,18 @@ using Microsoft.AspNetCore.Mvc;
 public class TransactionController : ControllerBase
 {
     private readonly ITransactionService _transactionService;
-
-    public TransactionController(ITransactionService transactionService)
+    private readonly ILogger<TransactionController> _logger;
+    public TransactionController(ITransactionService transactionService,ILogger<TransactionController> logger)
     {
+        _logger = logger;
         _transactionService = transactionService;
     }
 
     [HttpGet]
     public async Task<ActionResult<IEnumerable<TransactionsDTO>>> GetAllTransactions()
     {
+        _logger.LogInformation("GetAllTransactions called");
         var transactions = await _transactionService.GetAllAsync();
-
         return Ok(transactions);
     }
 

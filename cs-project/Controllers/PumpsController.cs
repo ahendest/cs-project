@@ -10,10 +10,12 @@ namespace cs_project.Controllers
     [Authorize]
     public class PumpsController : ControllerBase
     {
+        private readonly ILogger<PumpsController> _logger;
         private readonly IPumpService _pumpService;
 
-        public PumpsController(IPumpService pumpService)
+        public PumpsController(IPumpService pumpService, ILogger<PumpsController> logger)
         {
+            _logger = logger;
             _pumpService = pumpService;
         }
 
@@ -35,6 +37,7 @@ namespace cs_project.Controllers
         [HttpPost]
         public async Task<ActionResult<PumpDTO>> CreatePump([FromBody] PumpCreateDTO createDto)
         {
+            _logger.LogInformation("Pump Created!");
             var pumpDto = await _pumpService.CreatePumpAsync(createDto);
 
             return CreatedAtAction(nameof(GetPump), new { id = pumpDto.Id }, pumpDto);

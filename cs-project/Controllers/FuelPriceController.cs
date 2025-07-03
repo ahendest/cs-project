@@ -10,10 +10,12 @@ namespace cs_project.Controllers
     [Authorize]
     public class FuelPriceController : ControllerBase
     {
+        private readonly ILogger<FuelPriceController> _logger;
         private readonly IFuelPriceService _fuelPriceService;
 
-        public FuelPriceController(IFuelPriceService fuelPriceService)
+        public FuelPriceController(IFuelPriceService fuelPriceService, ILogger<FuelPriceController> logger)
         {
+            _logger = logger;
             _fuelPriceService = fuelPriceService;
         }
 
@@ -46,6 +48,7 @@ namespace cs_project.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateFuelPrice(int id, [FromBody] FuelPriceCreateDTO dto)
         {
+            _logger.LogInformation("FuelPrice updated!");
             var price = await _fuelPriceService.GetByIdAsync(id);
             if (price == null) return NotFound();
             
