@@ -1,9 +1,11 @@
 ﻿using cs_project.Core.DTOs;
 using cs_project.Infrastructure.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class TransactionController : ControllerBase
 {
     private readonly ITransactionService _transactionService;
