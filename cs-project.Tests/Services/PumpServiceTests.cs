@@ -5,7 +5,6 @@ using cs_project.Infrastructure.Mapping;
 using cs_project.Infrastructure.Repositories;
 using cs_project.Infrastructure.Services;
 using Moq;
-using Xunit;
 
 namespace cs_project.Tests.Services;
 

@@ -1,11 +1,13 @@
 ﻿using cs_project.Core.DTOs;
 using cs_project.Infrastructure.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace cs_project.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class PumpsController : ControllerBase
     {
         private readonly IPumpService _pumpService;
