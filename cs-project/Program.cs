@@ -7,7 +7,7 @@ using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
+using Serilog;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
@@ -59,6 +59,14 @@ builder.Services.AddCors(options =>
               .AllowAnyMethod();
     });
 });
+
+Log.Logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(builder.Configuration)
+    .Enrich.FromLogContext()
+    .CreateLogger();
+
+builder.Host.UseSerilog();
+
 
 builder.Services.AddValidatorsFromAssemblyContaining<PumpCreateDTOValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<TransactionCreateDTOValidator>();

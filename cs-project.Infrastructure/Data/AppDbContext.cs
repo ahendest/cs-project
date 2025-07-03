@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using cs_project.Core.Entities;
 using System.Collections.Generic;
+using cs_project.Core.Entities;
 
 namespace cs_project.Infrastructure.Data
 {

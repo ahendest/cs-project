@@ -2,6 +2,7 @@ using cs_project.Controllers;
 using cs_project.Core.DTOs;
 using cs_project.Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 
@@ -13,8 +14,9 @@ public class PumpsControllerTests
     public async Task GetPump_ReturnsNotFound_WhenNull()
     {
         var service = new Mock<IPumpService>();
+        var logger = new Mock<ILogger<PumpsController>>();
         service.Setup(s => s.GetPumpByIdAsync(1)).ReturnsAsync((PumpDTO?)null);
-        var controller = new PumpsController(service.Object);
+        var controller = new PumpsController(service.Object, logger.Object);
 
         var result = await controller.GetPump(1);
 
@@ -25,8 +27,9 @@ public class PumpsControllerTests
     public async Task DeletePump_ReturnsNoContent()
     {
         var service = new Mock<IPumpService>();
+        var logger = new Mock<ILogger<PumpsController>>();
         service.Setup(s => s.DeletePumpAsync(1)).ReturnsAsync(true);
-        var controller = new PumpsController(service.Object);
+        var controller = new PumpsController(service.Object, logger.Object);
 
         var result = await controller.DeletePump(1);
 
