@@ -1,0 +1,2 @@
+2025-07-06 01:20:37.249 +03:00 [INF] FuelPrice updated!
+2025-07-06 01:21:07.185 +03:00 [INF] FuelPrice updated!

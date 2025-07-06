@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 using cs_project.Core.Entities;
 
 namespace cs_project.Infrastructure.Data
