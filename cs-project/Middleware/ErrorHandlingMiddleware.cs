@@ -1,6 +1,5 @@
 ﻿using System.Net;
 using System.Text.Json;
-using Microsoft.AspNetCore.Http;
 
 namespace cs_project.Middleware
 {
@@ -33,7 +32,6 @@ namespace cs_project.Middleware
                     ,
                     stackTrace = ex.StackTrace
 #endif
-
                 };
                 var options = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
 

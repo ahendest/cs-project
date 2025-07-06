@@ -4,7 +4,6 @@ using cs_project.Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
-using Xunit;
 
 namespace cs_project.Tests.Controllers;
 

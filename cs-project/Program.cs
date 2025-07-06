@@ -2,14 +2,15 @@ using cs_project.Infrastructure.Data;
 using cs_project.Infrastructure.Mapping;
 using cs_project.Infrastructure.Repositories;
 using cs_project.Infrastructure.Services;
+using cs_project.Options;
 using cs_project.Validators;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Serilog;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Serilog;
 using System.Text;
 
 
@@ -67,7 +68,7 @@ Log.Logger = new LoggerConfiguration()
 
 builder.Host.UseSerilog();
 
-
+builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("Jwt"));
 builder.Services.AddValidatorsFromAssemblyContaining<PumpCreateDTOValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<TransactionCreateDTOValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<FuelPriceCreateDTOValidator>();

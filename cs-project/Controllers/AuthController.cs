@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using cs_project.Options;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -11,8 +13,11 @@ namespace cs_project.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly IConfiguration _config;
-        public AuthController(IConfiguration config) => _config = config;
+        private readonly JwtOptions _jwtOptions;
+        public AuthController(IOptions<JwtOptions> jwtOptions)
+        {
+            _jwtOptions = jwtOptions.Value;
+        }
 
         [AllowAnonymous]
         [HttpPost("login")]
@@ -21,33 +26,25 @@ namespace cs_project.Controllers
             if (request.Username != "admin" || request.Password != "F47s9xBVjKpZ82u6Lm31QWxYD1CZhYF5")
                 return Unauthorized();
 
-            var jwtKey = _config["Jwt:Key"];
-            if (string.IsNullOrEmpty(jwtKey))
+            if (string.IsNullOrEmpty(_jwtOptions.Key))
                 return StatusCode(500, "JWT key is not configured.");
-
-            var jwtIssuer = _config["Jwt:Issuer"];
-            var jwtAudience = _config["Jwt:Audience"];
 
             var claims = new[]
             {
                 new Claim(ClaimTypes.Name, request.Username)
             };
-
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.Key));
 
             var token = new JwtSecurityToken(
-                issuer: jwtIssuer,
-                audience: jwtAudience,
+                issuer: _jwtOptions.Issuer,
+                audience: _jwtOptions.Audience,
                 claims: claims,
                 expires: DateTime.UtcNow.AddHours(2),
                 signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256)
             );
-
             var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
-
             return Ok(new { Token = tokenString });
         }
-
         public class LoginRequest
         {
             public required string Username { get; set; }
