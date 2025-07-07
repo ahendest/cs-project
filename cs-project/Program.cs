@@ -1,3 +1,5 @@
+using Azure.Extensions.AspNetCore.Configuration.Secrets;
+using Azure.Identity;
 using cs_project.Infrastructure.Data;
 using cs_project.Infrastructure.Mapping;
 using cs_project.Infrastructure.Repositories;
@@ -7,6 +9,7 @@ using cs_project.Validators;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -14,9 +17,21 @@ using Serilog;
 using System.Text;
 
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 var allowedOrigins = builder.Configuration.GetSection("AllowedOrigins").Get<string[]>();
+
+if (!builder.Environment.IsDevelopment())
+{
+    var keyVaultName = builder.Configuration["cs-project-vault"];
+    if (!string.IsNullOrEmpty(keyVaultName))
+    {
+        var vaultUri = new Uri($"https://{keyVaultName}.vault.azure.net/");
+        builder.Configuration
+            .AddAzureKeyVault(vaultUri, new DefaultAzureCredential());
+    }
+}
 
 builder.Services.AddAuthentication(options =>
 {
