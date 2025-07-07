@@ -1,4 +1,5 @@
 ﻿using cs_project.Core.DTOs;
+using cs_project.Core.Models;
 using cs_project.Infrastructure.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -30,6 +31,14 @@ public class TransactionController : ControllerBase
         var transaction = await _transactionService.GetByIdAsync(id);
 
         return Ok(transaction);
+    }
+
+    [HttpGet("query")]
+    public async Task<ActionResult<PagedResult<TransactionsDTO>>> QueryTransactions([FromQuery] PagingQueryParameters query)
+    {
+        var result = await _transactionService.GetTransactionsAsync(query);
+        Response.Headers.Append("X-Total-Count", result.TotalCount.ToString());
+        return Ok(result);
     }
 
     [HttpPost]

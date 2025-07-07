@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using cs_project.Core.DTOs;
 using cs_project.Core.Entities;
+using cs_project.Core.Models;
 using cs_project.Infrastructure.Repositories;
 
 namespace cs_project.Infrastructure.Services
@@ -14,6 +15,20 @@ namespace cs_project.Infrastructure.Services
         {
             _transactionRepository = transactionRepository;
             _mapper = mapper;
+        }
+
+        public async Task<PagedResult<TransactionsDTO>> GetTransactionsAsync(PagingQueryParameters query)
+        {
+            var (entities, total) = await _transactionRepository.QueryTransactionsAsync(query);
+            var dtos = _mapper.Map<IEnumerable<TransactionsDTO>>(entities);
+
+            return new PagedResult<TransactionsDTO>
+            {
+                Items = dtos,
+                TotalCount = total,
+                Page = query.Page,
+                PageSize = query.PageSize
+            };
         }
 
         public async Task<IEnumerable<TransactionsDTO>> GetAllAsync()

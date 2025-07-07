@@ -1,4 +1,5 @@
 ﻿using cs_project.Core.DTOs;
+using cs_project.Core.Models;
 using cs_project.Infrastructure.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -33,6 +34,14 @@ namespace cs_project.Controllers
             var fuelPrice = await _fuelPriceService.GetByIdAsync(id);
             if (fuelPrice == null) return NotFound();
             return Ok(fuelPrice);
+        }
+
+        [HttpGet("query")]
+        public async Task<ActionResult<PagedResult<FuelPriceDTO>>> QueryFuelPrices([FromQuery] PagingQueryParameters query)
+        {
+            var result = await _fuelPriceService.GetFuelPricesAsync(query);
+            Response.Headers.Append("X-Total-Count", result.TotalCount.ToString());
+            return Ok(result);
         }
 
         [HttpPost]
