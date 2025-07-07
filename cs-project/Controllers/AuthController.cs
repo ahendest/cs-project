@@ -1,5 +1,6 @@
 ﻿using cs_project.Options;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -14,20 +15,32 @@ namespace cs_project.Controllers
     public class AuthController : ControllerBase
     {
         private readonly JwtOptions _jwtOptions;
-        public AuthController(IOptions<JwtOptions> jwtOptions)
+        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<IdentityUser> _userManager;
+
+        public AuthController(IOptions<JwtOptions> jwtOptions,
+                              SignInManager<IdentityUser> signInManager,
+                              UserManager<IdentityUser> userManager)
         {
             _jwtOptions = jwtOptions.Value;
+            _signInManager = signInManager;
+            _userManager = userManager;
         }
 
         [AllowAnonymous]
         [HttpPost("login")]
-        public IActionResult Login([FromBody] LoginRequest request)
+        public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
-            if (request.Username != "admin" || request.Password != "F47s9xBVjKpZ82u6Lm31QWxYD1CZhYF5")
-                return Unauthorized();
-
             if (string.IsNullOrEmpty(_jwtOptions.Key))
                 return StatusCode(500, "JWT key is not configured.");
+
+            var user = await _userManager.FindByNameAsync(request.Username);
+            if (user == null)
+                return Unauthorized();
+
+            var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, false);
+            if (!result.Succeeded)
+                return Unauthorized();
 
             var claims = new[]
             {
@@ -44,6 +57,17 @@ namespace cs_project.Controllers
             );
             var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
             return Ok(new { Token = tokenString });
+        }
+
+        [AllowAnonymous]
+        [HttpPost("register")]
+        public async Task<IActionResult> Register([FromBody] LoginRequest request)
+        {
+            var user = new IdentityUser { UserName = request.Username };
+            var result = await _userManager.CreateAsync(user, request.Password);
+            if (!result.Succeeded)
+                return BadRequest(result.Errors);
+            return Ok();
         }
         public class LoginRequest
         {
