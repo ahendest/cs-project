@@ -9,7 +9,7 @@ using cs_project.Infrastructure.Data;
 
 #nullable disable
 
-namespace cs_project.Migrations
+namespace cs_project.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     [Migration("20250701000000_InitialCreate")]
