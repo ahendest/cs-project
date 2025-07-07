@@ -23,7 +23,8 @@ namespace cs_project.Infrastructure.Data
             var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
             optionsBuilder.UseMySql(
                 connectionString,
-                new MySqlServerVersion(new Version(8, 0))
+                new MySqlServerVersion(new Version(8, 0)),
+                b => b.MigrationsAssembly("cs-project")
             );
 
             return new AppDbContext(optionsBuilder.Options);

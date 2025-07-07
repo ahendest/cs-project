@@ -133,8 +133,10 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySql(
         builder.Configuration.GetConnectionString("DefaultConnection"),
-        new MySqlServerVersion(new Version(8, 0))
-    ));
+        new MySqlServerVersion(new Version(8, 0)),
+        b => b.MigrationsAssembly("cs-project"))
+    );
+    
 
 
 builder.Services.AddIdentityCore<IdentityUser>()
