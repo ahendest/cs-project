@@ -8,6 +8,7 @@
       "sslPort": 44378
     }
   },
+
   "profiles": {
     "http": {
       "commandName": "Project",
@@ -16,7 +17,8 @@
       "launchUrl": "swagger",
       "applicationUrl": "http://localhost:5097",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "KEYVAULTNAME": "cs-project-vault"
       }
     },
     "https": {
