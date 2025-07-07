@@ -136,9 +136,23 @@ builder.Services.AddDbContext<AppDbContext>(options =>
         new MySqlServerVersion(new Version(8, 0))
     ));
 
+
 builder.Services.AddIdentityCore<IdentityUser>()
     .AddEntityFrameworkStores<AppDbContext>()
     .AddSignInManager();
+
+
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+if (string.IsNullOrEmpty(connectionString))
+{
+    throw new InvalidOperationException("The connection string 'DefaultConnection' is not configured.");
+}
+
+builder.Services.AddHealthChecks()
+    .AddMySql(
+        connectionString,
+        name: "mysql",
+        timeout: TimeSpan.FromSeconds(5));
 
 var app = builder.Build();
 
@@ -148,6 +162,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseSerilogRequestLogging(); 
 
 app.UseHttpsRedirection();
 
@@ -160,6 +176,8 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseMiddleware<cs_project.Middleware.ErrorHandlingMiddleware>();
+
+app.MapHealthChecks("/healthz");  
 
 app.MapControllers();
 
