@@ -29,6 +29,8 @@ public class TransactionController : ControllerBase
     public async Task<ActionResult<TransactionsDTO>> GetTransaction(int id)
     {
         var transaction = await _transactionService.GetByIdAsync(id);
+        if (transaction == null)
+            return NotFound();
 
         return Ok(transaction);
     }

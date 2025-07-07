@@ -64,8 +64,8 @@ namespace cs_project.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePump(int id)
         {
-            await _pumpService.DeletePumpAsync(id);
-            return NoContent();
+            var deleted = await _pumpService.DeletePumpAsync(id);
+            return deleted ? NoContent() : NotFound();
         }
     }
 }

@@ -61,7 +61,7 @@ namespace cs_project.Controllers
             var price = await _fuelPriceService.GetByIdAsync(id);
             if (price == null) return NotFound();
             
-            await _fuelPriceService.UpdateAsync(id,dto);;
+            await _fuelPriceService.UpdateAsync(id,dto);
             return Ok(price);
 
 
