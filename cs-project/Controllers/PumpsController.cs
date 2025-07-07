@@ -2,6 +2,7 @@
 using cs_project.Infrastructure.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using cs_project.Core.Models;
 
 namespace cs_project.Controllers
 {
@@ -32,6 +33,15 @@ namespace cs_project.Controllers
             var pump = await _pumpService.GetPumpByIdAsync(id);
             if (pump == null) return NotFound();
             return Ok(pump);
+        }
+
+        [HttpGet("query")]
+        public async Task<ActionResult<PagedResult<PumpDTO>>> QueryPumps([FromQuery] PagingQueryParameters query)
+        {
+            var result = await _pumpService.GetPumpAsync(query);
+            Response.Headers.Append("X-Total-Count", result.TotalCount.ToString());
+
+            return Ok(result);
         }
 
         [HttpPost]

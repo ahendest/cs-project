@@ -2,6 +2,7 @@
 using cs_project.Core.DTOs;
 using cs_project.Core.Entities;
 using cs_project.Infrastructure.Repositories;
+using cs_project.Core.Models;
 
 namespace cs_project.Infrastructure.Services
 {
@@ -14,6 +15,20 @@ namespace cs_project.Infrastructure.Services
         {
             _pumpRepository = pumpRepository;
             _mapper = mapper;
+        }
+
+        public async Task<PagedResult<PumpDTO>> GetPumpAsync(PagingQueryParameters query)
+        {
+            var (entities, total) = await _pumpRepository.QueryPumpsAsync(query);
+            var dtoList = _mapper.Map<IEnumerable<PumpDTO>>(entities);
+
+            return new PagedResult<PumpDTO>
+            {
+                Items = dtoList,
+                TotalCount = total,
+                Page = query.Page,
+                PageSize = query.PageSize
+            };
         }
 
         public async Task<IEnumerable<PumpDTO>> GetAllPumpsAsync()

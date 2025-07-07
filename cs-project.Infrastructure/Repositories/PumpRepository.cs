@@ -1,6 +1,7 @@
 ﻿using cs_project.Core.Entities;
 using cs_project.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using cs_project.Core.Models;
 
 namespace cs_project.Infrastructure.Repositories
 {
@@ -9,6 +10,37 @@ namespace cs_project.Infrastructure.Repositories
         private readonly AppDbContext _pumpService;
 
         public PumpRepository(AppDbContext pumpService) => _pumpService = pumpService;
+
+        public async Task<(IEnumerable<Pump> Items, int TotalCount)> QueryPumpsAsync(PagingQueryParameters query)
+        {
+            var pumps = _pumpService.Pumps.AsNoTracking();
+            if (!string.IsNullOrWhiteSpace(query.SearchTerm))
+            {
+                string term = query.SearchTerm.ToLower();
+                pumps = pumps.Where(p =>
+                        p.FuelType.ToLower().Contains(term) ||
+                        p.Status.ToLower().Contains(term));
+            }
+
+            pumps = query.SortBy?.ToLower() switch
+            {
+                "fueltype_desc" => pumps.OrderByDescending(p => p.FuelType),
+                "status" => pumps.OrderBy(p => p.Status),
+                "status_desc" => pumps.OrderByDescending(p => p.Status),
+                _ => pumps.OrderBy(p => p.FuelType)
+            };
+
+            int totalCount = await pumps.CountAsync();
+
+            int page = query.Page > 0 ? query.Page : 1;
+            int pageSize = query.PageSize > 0 && query.PageSize <= 100 ? query.PageSize : 20;
+            pumps = pumps.Skip((page - 1) * pageSize).Take(pageSize);
+
+            var items = await pumps.ToListAsync();
+
+            return (items, totalCount);
+
+        }
 
         public async Task<IEnumerable<Pump>> GetAllAsync() =>
             await _pumpService.Pumps.AsNoTracking().ToListAsync();
