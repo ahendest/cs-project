@@ -61,7 +61,7 @@ namespace cs_project.Controllers
             var price = await _fuelPriceService.GetByIdAsync(id);
             if (price == null) return NotFound();
             
-            await _fuelPriceService.UpdateAsync(id,dto);;
+            await _fuelPriceService.UpdateAsync(id,dto);
             return Ok(price);
 
 
@@ -73,8 +73,8 @@ namespace cs_project.Controllers
             var fuelPrice = await _fuelPriceService.GetByIdAsync(id);
             if (fuelPrice == null) return NotFound();
 
-            await _fuelPriceService.DeleteAsync(id);
-            return NoContent();
+            var deleted = await _fuelPriceService.DeleteAsync(id);
+            return deleted ? NoContent() : NotFound();
         }
     }
 }
