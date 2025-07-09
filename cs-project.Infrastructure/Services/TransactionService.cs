@@ -3,17 +3,20 @@ using cs_project.Core.DTOs;
 using cs_project.Core.Entities;
 using cs_project.Core.Models;
 using cs_project.Infrastructure.Repositories;
+using cs_project.Core.Exceptions;
 
 namespace cs_project.Infrastructure.Services
 {
     public class TransactionService : ITransactionService
     {
         private readonly ITransactionRepository _transactionRepository;
+        private readonly IPumpRepository _pumpRepository;
         private readonly IMapper _mapper;
 
-        public TransactionService(ITransactionRepository transactionRepository, IMapper mapper)
+        public TransactionService(ITransactionRepository transactionRepository, IPumpRepository pumpRepository, IMapper mapper)
         {
             _transactionRepository = transactionRepository;
+            _pumpRepository = pumpRepository;
             _mapper = mapper;
         }
 
@@ -46,6 +49,9 @@ namespace cs_project.Infrastructure.Services
         public async Task<TransactionsDTO> CreateAsync(TransactionsCreateDTO transactionDto)
         {
             var transaction = _mapper.Map<Transaction>(transactionDto);
+            var pumpId = await _pumpRepository.GetByIdAsync(transactionDto.PumpId);
+            if(pumpId == null) throw new NotFoundException("Pump not found");
+
             await _transactionRepository.AddAsync(transaction);
             await _transactionRepository.SaveChangesAsync();
             return _mapper.Map<TransactionsDTO>(transaction);

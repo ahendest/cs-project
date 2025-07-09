@@ -20,6 +20,19 @@ namespace cs_project.Controllers
             _fuelPriceService = fuelPriceService;
         }
 
+        [HttpGet("throw")]
+        public IActionResult ThrowError()
+        {
+            throw new Exception("Test exception for error handling");
+        }
+
+        [HttpGet("env")]
+        public IActionResult GetEnv([FromServices] IHostEnvironment env)
+        {
+            return Ok(env.EnvironmentName);
+        }
+
+
         [HttpGet]
         public async Task<ActionResult<List<FuelPriceDTO>>> GetAllFuelPrices()
         {

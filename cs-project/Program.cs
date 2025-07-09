@@ -106,6 +106,12 @@ Log.Logger = new LoggerConfiguration()
 builder.Host.UseSerilog();
 
 builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("Jwt"));
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+    options.Lockout.MaxFailedAccessAttempts = 5;
+    options.Lockout.AllowedForNewUsers = true;
+});
 builder.Services.AddValidatorsFromAssemblyContaining<PumpCreateDTOValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<TransactionCreateDTOValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<FuelPriceCreateDTOValidator>();
@@ -123,6 +129,7 @@ builder.Services.AddScoped<IFuelPriceService, FuelPriceService>();
 
 
 builder.Services.AddControllers();
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen(options =>
@@ -181,13 +188,13 @@ app.UseHttpsRedirection();
 
 app.UseRouting();
 
+app.UseMiddleware<cs_project.Middleware.ErrorHandlingMiddleware>();
+
 app.UseCors("FrontendPolicy");
 
 app.UseAuthentication();  
 
 app.UseAuthorization();
-
-app.UseMiddleware<cs_project.Middleware.ErrorHandlingMiddleware>();
 
 app.MapControllers();
 

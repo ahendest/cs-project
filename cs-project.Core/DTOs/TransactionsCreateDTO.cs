@@ -9,6 +9,5 @@ namespace cs_project.Core.DTOs
         public double PricePerLiter { get; set; }
         public double TotalPrice { get; set; }
         public DateTime Timestamp { get; set; }
-        public Pump? Pump { get; set; }
     }
 }

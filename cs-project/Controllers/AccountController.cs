@@ -40,7 +40,8 @@ namespace cs_project.Controllers
             var user = await _userManager.FindByNameAsync(model.UserName);
             if (user == null) return Unauthorized("Invalid credentials.");
 
-            var result = await _signInManager.CheckPasswordSignInAsync(user, model.Password, false);
+            var result = await _signInManager.PasswordSignInAsync(user, model.Password, false, lockoutOnFailure: true);
+            if (result.IsLockedOut) return BadRequest("Account is temporarily locked. Try again later.");
             if (!result.Succeeded) return Unauthorized("Invalid credentials.");
 
             var claims = new[]

@@ -21,8 +21,9 @@ public class TransactionServiceTests
     public async Task UpdateAsync_ReturnsFalse_WhenNotFound()
     {
         var repo = new Mock<ITransactionRepository>();
+        var pumpRepo = new Mock<IPumpRepository>();
         repo.Setup(r => r.GetByIdAsync(1)).ReturnsAsync((Transaction?)null);
-        var service = new TransactionService(repo.Object, _mapper);
+        var service = new TransactionService(repo.Object, pumpRepo.Object, _mapper);
 
         var result = await service.UpdateAsync(1, new TransactionsCreateDTO());
 
@@ -33,9 +34,14 @@ public class TransactionServiceTests
     public async Task CreateAsync_ReturnsDto()
     {
         var repo = new Mock<ITransactionRepository>();
+        var pumpRepo = new Mock<IPumpRepository>();
+        
+        pumpRepo.Setup(r => r.GetByIdAsync(1))
+            .ReturnsAsync(new Pump { Id = 1, FuelType = "Diesel", CurrentVolume = 100, Status = "Idle" });
+
         repo.Setup(r => r.AddAsync(It.IsAny<Transaction>())).Returns(Task.CompletedTask);
         repo.Setup(r => r.SaveChangesAsync()).ReturnsAsync(true);
-        var service = new TransactionService(repo.Object, _mapper);
+        var service = new TransactionService(repo.Object, pumpRepo.Object, _mapper);
         var dto = new TransactionsCreateDTO { PumpId = 1, Liters = 10, PricePerLiter = 1, TotalPrice = 10, Timestamp = DateTime.UtcNow };
 
         var result = await service.CreateAsync(dto);
