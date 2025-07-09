@@ -1,4 +1,3 @@
-using Azure.Extensions.AspNetCore.Configuration.Secrets;
 using Azure.Identity;
 using cs_project.Infrastructure.Data;
 using cs_project.Infrastructure.Mapping;
@@ -15,7 +14,6 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using System.Text;
-
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -166,6 +164,8 @@ builder.Services.AddHealthChecks()
         connectionString,
         name: "mysql",
         timeout: TimeSpan.FromSeconds(5));
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

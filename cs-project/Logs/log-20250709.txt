@@ -60,3 +60,8 @@ CREATE TABLE `FuelPrices` (
 2025-07-09 02:54:26.786 +03:00 [INF] /api/Health 200 in 956.2744 ms HTTP GET /api/Health responded 200 in 956.2744 ms
 2025-07-09 02:54:40.299 +03:00 [INF] /api/Health 200 in 46.9827 ms HTTP GET /api/Health responded 200 in 46.9827 ms
 2025-07-09 02:54:53.676 +03:00 [INF] /api/FuelPrice 200 in 422.8346 ms HTTP GET /api/FuelPrice responded 200 in 422.8346 ms
+2025-07-09 16:10:27.115 +03:00 [INF] /api/Account/login 200 in 1499.1569 ms HTTP POST /api/Account/login responded 200 in 1499.1569 ms
+2025-07-09 16:10:49.076 +03:00 [INF] /api/FuelPrice 200 in 188.3840 ms HTTP GET /api/FuelPrice responded 200 in 188.3840 ms
+2025-07-09 16:10:57.763 +03:00 [INF] /api/Health 200 in 53.8197 ms HTTP GET /api/Health responded 200 in 53.8197 ms
+2025-07-09 16:11:06.446 +03:00 [INF] /healthz 200 in 24.9739 ms HTTP GET /healthz responded 200 in 24.9739 ms
+2025-07-09 16:11:06.662 +03:00 [INF] /favicon.ico 404 in 0.8870 ms HTTP GET /favicon.ico responded 404 in 0.8870 ms
