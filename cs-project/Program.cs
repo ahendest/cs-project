@@ -24,7 +24,7 @@ var allowedOrigins = builder.Configuration.GetSection("AllowedOrigins").Get<stri
 
 if (!builder.Environment.IsDevelopment())
 {
-    var keyVaultName = builder.Configuration["cs-project-vault"];
+    var keyVaultName = builder.Configuration["KeyVaultName"];
     if (!string.IsNullOrEmpty(keyVaultName))
     {
         var vaultUri = new Uri($"https://{keyVaultName}.vault.azure.net/");
@@ -33,9 +33,23 @@ if (!builder.Environment.IsDevelopment())
     }
 }
 
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseMySql(
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        new MySqlServerVersion(new Version(8, 0))
+    ));
+
+builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+    .AddEntityFrameworkStores<AppDbContext>()
+    .AddDefaultTokenProviders();
+
+
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme; 
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme; 
+
 })
 .AddJwtBearer(options =>
 {
@@ -61,7 +75,17 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+
 builder.Services.AddAuthorization();
+
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.Events.OnRedirectToLogin = context =>
+    {
+        context.Response.StatusCode = 401;
+        return Task.CompletedTask;
+    };
+});
 
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddFluentValidationClientsideAdapters();
@@ -130,11 +154,6 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseMySql(
-        builder.Configuration.GetConnectionString("DefaultConnection"),
-        new MySqlServerVersion(new Version(8, 0)) 
-    ));
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 if (string.IsNullOrEmpty(connectionString))
@@ -170,8 +189,12 @@ app.UseAuthorization();
 
 app.UseMiddleware<cs_project.Middleware.ErrorHandlingMiddleware>();
 
-app.MapHealthChecks("/healthz");  
-
 app.MapControllers();
+
+app.MapHealthChecks("/healthz");  
+Console.WriteLine("JWT VALIDATION SETTINGS:");
+Console.WriteLine("Issuer: " + builder.Configuration["Jwt:Issuer"]);
+Console.WriteLine("Audience: " + builder.Configuration["Jwt:Audience"]);
+Console.WriteLine("Key length: " + builder.Configuration["Jwt:Key"]?.Length);
 
 app.Run();

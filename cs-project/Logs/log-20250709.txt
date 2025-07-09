@@ -1,0 +1,62 @@
+2025-07-09 00:18:34.480 +03:00 [ERR]   in  ms Failed executing DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE `FuelPrices` (
+    `Id` int NOT NULL AUTO_INCREMENT,
+    `FuelType` longtext CHARACTER SET utf8mb4 NOT NULL,
+    `CurrentPrice` double NOT NULL,
+    `UpdatedAt` datetime(6) NOT NULL,
+    CONSTRAINT `PK_FuelPrices` PRIMARY KEY (`Id`)
+) CHARACTER SET=utf8mb4;
+2025-07-09 00:22:54.117 +03:00 [INF] /api/Health 200 in 984.1780 ms HTTP GET /api/Health responded 200 in 984.1780 ms
+2025-07-09 00:23:01.103 +03:00 [INF] /healthz 200 in 41.6498 ms HTTP GET /healthz responded 200 in 41.6498 ms
+2025-07-09 01:43:38.586 +03:00 [INF] /api/Account/login 401 in 1362.0662 ms HTTP POST /api/Account/login responded 401 in 1362.0662 ms
+2025-07-09 01:44:04.960 +03:00 [INF] /api/Account/register 200 in 301.9272 ms HTTP POST /api/Account/register responded 200 in 301.9272 ms
+2025-07-09 01:44:20.055 +03:00 [INF] /api/Account/login 200 in 154.4090 ms HTTP POST /api/Account/login responded 200 in 154.4090 ms
+2025-07-09 01:44:41.311 +03:00 [INF] /api/Health 200 in 42.3193 ms HTTP GET /api/Health responded 200 in 42.3193 ms
+2025-07-09 01:44:53.079 +03:00 [INF] /api/FuelPrice/query 302 in 8.9158 ms HTTP GET /api/FuelPrice/query responded 302 in 8.9158 ms
+2025-07-09 01:44:53.084 +03:00 [INF] /Account/Login 404 in 0.6291 ms HTTP GET /Account/Login responded 404 in 0.6291 ms
+2025-07-09 01:45:11.419 +03:00 [INF] /api/FuelPrice/query 302 in 11.9994 ms HTTP GET /api/FuelPrice/query responded 302 in 11.9994 ms
+2025-07-09 01:45:11.423 +03:00 [INF] /Account/Login 404 in 0.1608 ms HTTP GET /Account/Login responded 404 in 0.1608 ms
+2025-07-09 01:45:22.575 +03:00 [INF] /api/FuelPrice/1 302 in 1.7588 ms HTTP GET /api/FuelPrice/1 responded 302 in 1.7588 ms
+2025-07-09 01:45:22.579 +03:00 [INF] /Account/Login 404 in 0.1028 ms HTTP GET /Account/Login responded 404 in 0.1028 ms
+2025-07-09 01:45:34.737 +03:00 [INF] /api/Health 200 in 20.9877 ms HTTP GET /api/Health responded 200 in 20.9877 ms
+2025-07-09 01:45:40.282 +03:00 [INF] /healthz 200 in 26.2640 ms HTTP GET /healthz responded 200 in 26.2640 ms
+2025-07-09 01:45:48.466 +03:00 [INF] /api/Transaction 302 in 0.3082 ms HTTP GET /api/Transaction responded 302 in 0.3082 ms
+2025-07-09 01:45:48.470 +03:00 [INF] /Account/Login 404 in 0.1174 ms HTTP GET /Account/Login responded 404 in 0.1174 ms
+2025-07-09 01:45:58.716 +03:00 [INF] /api/Transaction 302 in 0.2029 ms HTTP GET /api/Transaction responded 302 in 0.2029 ms
+2025-07-09 01:45:58.726 +03:00 [INF] /Account/Login 404 in 0.1695 ms HTTP GET /Account/Login responded 404 in 0.1695 ms
+2025-07-09 01:46:42.506 +03:00 [INF] /api/Transaction 302 in 3.8833 ms HTTP POST /api/Transaction responded 302 in 3.8833 ms
+2025-07-09 01:46:42.513 +03:00 [INF] /Account/Login 404 in 0.5166 ms HTTP GET /Account/Login responded 404 in 0.5166 ms
+2025-07-09 01:49:57.289 +03:00 [INF] /api/Account/login 200 in 1212.2382 ms HTTP POST /api/Account/login responded 200 in 1212.2382 ms
+2025-07-09 01:53:24.904 +03:00 [INF] /api/FuelPrice 302 in 9.8465 ms HTTP GET /api/FuelPrice responded 302 in 9.8465 ms
+2025-07-09 01:53:24.911 +03:00 [INF] /Account/Login 404 in 1.8054 ms HTTP GET /Account/Login responded 404 in 1.8054 ms
+2025-07-09 01:58:50.066 +03:00 [INF] /api/Health 200 in 97.8885 ms HTTP GET /api/Health responded 200 in 97.8885 ms
+2025-07-09 01:58:58.677 +03:00 [INF] /api/Pumps 302 in 1.7156 ms HTTP GET /api/Pumps responded 302 in 1.7156 ms
+2025-07-09 01:58:58.681 +03:00 [INF] /Account/Login 404 in 0.1851 ms HTTP GET /Account/Login responded 404 in 0.1851 ms
+2025-07-09 02:02:21.043 +03:00 [INF] /api/Account/login 200 in 1432.6147 ms HTTP POST /api/Account/login responded 200 in 1432.6147 ms
+2025-07-09 02:02:46.344 +03:00 [INF] /api/FuelPrice 302 in 11.7497 ms HTTP GET /api/FuelPrice responded 302 in 11.7497 ms
+2025-07-09 02:02:46.351 +03:00 [INF] /Account/Login 404 in 1.9971 ms HTTP GET /Account/Login responded 404 in 1.9971 ms
+2025-07-09 02:02:57.935 +03:00 [INF] /healthz 200 in 31.5240 ms HTTP GET /healthz responded 200 in 31.5240 ms
+2025-07-09 02:07:38.586 +03:00 [INF] /api/Pumps 405 in 0.2810 ms HTTP 'GET' /api/Pumps responded 405 in 0.2810 ms
+2025-07-09 02:08:13.041 +03:00 [INF] /api/Pumps 302 in 6.8260 ms HTTP GET /api/Pumps responded 302 in 6.8260 ms
+2025-07-09 02:08:13.046 +03:00 [INF] /Account/Login 404 in 0.1177 ms HTTP GET /Account/Login responded 404 in 0.1177 ms
+2025-07-09 02:08:19.554 +03:00 [INF] /api/pumps 302 in 2.5270 ms HTTP GET /api/pumps responded 302 in 2.5270 ms
+2025-07-09 02:08:19.565 +03:00 [INF] /Account/Login 404 in 0.1243 ms HTTP GET /Account/Login responded 404 in 0.1243 ms
+2025-07-09 02:13:42.835 +03:00 [INF] /api/Account/login 200 in 1599.5236 ms HTTP POST /api/Account/login responded 200 in 1599.5236 ms
+2025-07-09 02:14:04.936 +03:00 [INF] /api/FuelPrice 302 in 14.2661 ms HTTP GET /api/FuelPrice responded 302 in 14.2661 ms
+2025-07-09 02:14:04.945 +03:00 [INF] /Account/Login 404 in 3.3972 ms HTTP GET /Account/Login responded 404 in 3.3972 ms
+2025-07-09 02:14:18.345 +03:00 [INF] /api/FuelPrice 302 in 1.7417 ms HTTP GET /api/FuelPrice responded 302 in 1.7417 ms
+2025-07-09 02:14:18.349 +03:00 [INF] /Account/Login 404 in 0.1808 ms HTTP GET /Account/Login responded 404 in 0.1808 ms
+2025-07-09 02:14:39.813 +03:00 [INF] /api/FuelPrice 302 in 6.5572 ms HTTP GET /api/FuelPrice responded 302 in 6.5572 ms
+2025-07-09 02:14:39.818 +03:00 [INF] /Account/Login 404 in 0.1417 ms HTTP GET /Account/Login responded 404 in 0.1417 ms
+2025-07-09 02:23:24.201 +03:00 [INF] /api/pumps/query 302 in 36.5843 ms HTTP GET /api/pumps/query responded 302 in 36.5843 ms
+2025-07-09 02:31:33.393 +03:00 [INF] /api/pumps/query 401 in 29.5523 ms HTTP GET /api/pumps/query responded 401 in 29.5523 ms
+2025-07-09 02:32:34.224 +03:00 [INF] /api/Account/login 200 in 1354.5770 ms HTTP POST /api/Account/login responded 200 in 1354.5770 ms
+2025-07-09 02:32:59.240 +03:00 [INF] /api/pumps/query 401 in 3.3271 ms HTTP GET /api/pumps/query responded 401 in 3.3271 ms
+2025-07-09 02:33:11.550 +03:00 [INF] /api/FuelPrice 401 in 2.3376 ms HTTP GET /api/FuelPrice responded 401 in 2.3376 ms
+2025-07-09 02:33:45.320 +03:00 [INF] /api/FuelPrice 401 in 1.1525 ms HTTP GET /api/FuelPrice responded 401 in 1.1525 ms
+2025-07-09 02:39:46.795 +03:00 [INF] /api/Account/login 200 in 1211.2142 ms HTTP POST /api/Account/login responded 200 in 1211.2142 ms
+2025-07-09 02:40:14.932 +03:00 [INF] /api/FuelPrice 401 in 13.2473 ms HTTP GET /api/FuelPrice responded 401 in 13.2473 ms
+2025-07-09 02:45:59.967 +03:00 [INF] /api/FuelPrice 401 in 5.5870 ms HTTP GET /api/FuelPrice responded 401 in 5.5870 ms
+2025-07-09 02:54:26.786 +03:00 [INF] /api/Health 200 in 956.2744 ms HTTP GET /api/Health responded 200 in 956.2744 ms
+2025-07-09 02:54:40.299 +03:00 [INF] /api/Health 200 in 46.9827 ms HTTP GET /api/Health responded 200 in 46.9827 ms
+2025-07-09 02:54:53.676 +03:00 [INF] /api/FuelPrice 200 in 422.8346 ms HTTP GET /api/FuelPrice responded 200 in 422.8346 ms
