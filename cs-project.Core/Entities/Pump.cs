@@ -1,10 +1,19 @@
-﻿namespace cs_project.Core.Entities
+﻿using static cs_project.Core.Entities.Enums;
+
+namespace cs_project.Core.Entities
 {
-    public class Pump
+    public class Pump : BaseEntity
     {
-        public int Id { get; set; }
-        public string FuelType { get; set; } = string.Empty;
+        public int StationId { get; set; }
+        public int TankId { get; set; }
+
+        public FuelType FuelType { get; set; }
         public double CurrentVolume { get; set; }
-        public string Status { get; set; } = "Idle";
+        public PumpStatus Status { get; set; } = PumpStatus.Idle;
+
+        
+        public Station? Station { get; set; }
+        public Tank? Tank { get; set; }
+        public ICollection<Transaction> Transactions { get; set; } = [];
     }
 }

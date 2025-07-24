@@ -1,9 +1,10 @@
-﻿namespace cs_project.Core.Entities
+﻿using static cs_project.Core.Entities.Enums;
+
+namespace cs_project.Core.Entities
 {
-    public class FuelPrice
+    public class FuelPrice : BaseEntity
     {
-        public int Id { get; set; }
-        public string FuelType { get; set; } = string.Empty;
+        public FuelType FuelType { get; set; }
         public double CurrentPrice { get; set; }
         public DateTime UpdatedAt { get; set; }
     }

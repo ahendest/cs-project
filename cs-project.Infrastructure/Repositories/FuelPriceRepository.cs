@@ -21,7 +21,7 @@ namespace cs_project.Infrastructure.Repositories
             {
                 string term = query.SearchTerm.ToLower();
                 prices = prices.Where(fp =>
-                         fp.FuelType.ToLower().Contains(term));
+                         fp.FuelType.ToString().ToLower().Contains(term));
             }
             prices = query.SortBy?.ToLower() switch
             {

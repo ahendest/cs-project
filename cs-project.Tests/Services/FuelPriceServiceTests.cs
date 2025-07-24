@@ -5,6 +5,7 @@ using cs_project.Infrastructure.Mapping;
 using cs_project.Infrastructure.Repositories;
 using cs_project.Infrastructure.Services;
 using Moq;
+using static cs_project.Core.Entities.Enums;
 
 namespace cs_project.Tests.Services;
 
@@ -21,8 +22,8 @@ public class FuelPriceServiceTests
     public async Task GetAllAsync_ReturnsAllDtos()
     {
         var prices = new List<FuelPrice> {
-            new FuelPrice { Id = 1, FuelType = "A", CurrentPrice = 1.0 },
-            new FuelPrice { Id = 2, FuelType = "B", CurrentPrice = 2.0 }
+        new FuelPrice { Id = 1, FuelType = FuelType.Diesel, CurrentPrice = 1.0 },
+        new FuelPrice { Id = 2, FuelType = FuelType.LPG, CurrentPrice = 2.0 }
         };
         var repo = new Mock<IFuelPriceRepository>();
         repo.Setup(r => r.GetAllAsync()).ReturnsAsync(prices);

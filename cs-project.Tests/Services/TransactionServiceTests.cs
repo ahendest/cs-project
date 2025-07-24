@@ -5,6 +5,7 @@ using cs_project.Infrastructure.Mapping;
 using cs_project.Infrastructure.Repositories;
 using cs_project.Infrastructure.Services;
 using Moq;
+using static cs_project.Core.Entities.Enums;
 
 namespace cs_project.Tests.Services;
 
@@ -37,7 +38,7 @@ public class TransactionServiceTests
         var pumpRepo = new Mock<IPumpRepository>();
         
         pumpRepo.Setup(r => r.GetByIdAsync(1))
-            .ReturnsAsync(new Pump { Id = 1, FuelType = "Diesel", CurrentVolume = 100, Status = "Idle" });
+            .ReturnsAsync(new Pump { Id = 1, TankId = 1, FuelType = FuelType.Diesel, CurrentVolume = 100, Status = PumpStatus.Idle });
 
         repo.Setup(r => r.AddAsync(It.IsAny<Transaction>())).Returns(Task.CompletedTask);
         repo.Setup(r => r.SaveChangesAsync()).ReturnsAsync(true);

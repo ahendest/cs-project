@@ -18,8 +18,8 @@ namespace cs_project.Infrastructure.Repositories
             {
                 string term = query.SearchTerm.ToLower();
                 pumps = pumps.Where(p =>
-                        p.FuelType.ToLower().Contains(term) ||
-                        p.Status.ToLower().Contains(term));
+                        p.FuelType.ToString().ToLower().Contains(term) ||
+                        p.Status.ToString().ToLower().Contains(term));
             }
 
             pumps = query.SortBy?.ToLower() switch

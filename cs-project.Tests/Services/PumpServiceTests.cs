@@ -5,6 +5,7 @@ using cs_project.Infrastructure.Mapping;
 using cs_project.Infrastructure.Repositories;
 using cs_project.Infrastructure.Services;
 using Moq;
+using static cs_project.Core.Entities.Enums;
 
 namespace cs_project.Tests.Services;
 
@@ -21,7 +22,7 @@ public class PumpServiceTests
     public async Task GetPumpById_ReturnsDto()
     {
         var repo = new Mock<IPumpRepository>();
-        repo.Setup(r => r.GetByIdAsync(1)).ReturnsAsync(new Pump { Id = 1, FuelType = "A" });
+        repo.Setup(r => r.GetByIdAsync(1)).ReturnsAsync(new Pump { Id = 1, FuelType = FuelType.LPG });
         var service = new PumpService(repo.Object, _mapper);
 
         var result = await service.GetPumpByIdAsync(1);
