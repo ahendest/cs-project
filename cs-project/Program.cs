@@ -1,5 +1,8 @@
 using Azure.Identity;
+using cs_project.Core.Interfaces;
+using cs_project.Infrastructure.Auth;
 using cs_project.Infrastructure.Data;
+using cs_project.Infrastructure.Data.Auditing;
 using cs_project.Infrastructure.Mapping;
 using cs_project.Infrastructure.Repositories;
 using cs_project.Infrastructure.Services;
@@ -10,6 +13,7 @@ using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
@@ -126,6 +130,13 @@ builder.Services.AddScoped<ITransactionService, TransactionService>();
 
 builder.Services.AddScoped<IFuelPriceRepository, FuelPriceRepository>();
 builder.Services.AddScoped<IFuelPriceService, FuelPriceService>();
+
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<ICurrentUserAccessor, CurrentUserAccessor>();
+builder.Services.AddSingleton<SaveChangesInterceptor, AuditInterceptor>();
+
+builder.Services.AddSingleton<SaveChangesInterceptor, AuditInterceptor>();
+builder.Services.AddHostedService<AuditWriterService>();
 
 
 builder.Services.AddControllers();

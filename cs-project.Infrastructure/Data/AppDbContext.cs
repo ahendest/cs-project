@@ -1,4 +1,6 @@
 ﻿using cs_project.Core.Entities;
+using cs_project.Core.Entities.Audit;
+using cs_project.Core.Entities.History;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -21,6 +23,8 @@ namespace cs_project.Infrastructure.Data
         public DbSet<CustomerPayment> CustomerPayments => Set<CustomerPayment>();
         public DbSet<SupplierPayment> SupplierPayments => Set<SupplierPayment>();
         public DbSet<CorrectionLog> CorrectionLogs => Set<CorrectionLog>();
+        public DbSet<TransactionHistory> TransactionHistories => Set<TransactionHistory>();
+        public DbSet<AuditLog> AuditLogs => Set<AuditLog>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -123,8 +127,8 @@ namespace cs_project.Infrastructure.Data
             //
 
             modelBuilder.Entity<Pump>()
-    .Property(p => p.FuelType)
-    .HasConversion<string>();
+                .Property(p => p.FuelType)
+                .HasConversion<string>();
 
             modelBuilder.Entity<FuelPrice>()
                 .Property(p => p.FuelType)
@@ -157,16 +161,32 @@ namespace cs_project.Infrastructure.Data
                 typeof(Employee), typeof(Shift), typeof(Customer), typeof(Supplier),
                 typeof(FuelDelivery), typeof(Transaction), typeof(CustomerPayment), typeof(SupplierPayment)
             };
-            Console.WriteLine("this comment is after declare auditableEntities and before the commented for!");
-            foreach (var type in auditableEntities)
-            {
-                modelBuilder.Entity(type)
-                .Property<byte[]>("RowVersion")
-                .IsRowVersion()
-                .IsConcurrencyToken()
-                .HasColumnType("timestamp")
-                .ValueGeneratedOnAddOrUpdate();
-            }
+
+            //foreach (var type in auditableEntities)
+            //{
+            //    Console.WriteLine($"now we are here : {type.Name} ");
+            //    try
+            //    {
+            //        var entity = modelBuilder.Model.FindEntityType(type);
+            //        if (entity != null)
+            //        {
+            //            modelBuilder.Entity(type)
+            //                .Property<byte[]>("RowVersion")
+            //                .IsRowVersion()
+            //                .IsConcurrencyToken()
+            //                .HasColumnType("timestamp")
+            //                .ValueGeneratedOnAddOrUpdate();
+            //        }
+            //        else
+            //        {
+            //            Console.WriteLine($"Warning: {type.Name} is not a registered entity.");
+            //        }
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        Console.WriteLine($"Error configuring RowVersion for {type.Name}: {ex.Message}");
+            //    }
+            //}
         }
     }
 }
