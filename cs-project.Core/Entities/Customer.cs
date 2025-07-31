@@ -1,7 +1,7 @@
 ﻿
 namespace cs_project.Core.Entities
 {
-    public class Customer : BaseEntity
+    public class Customer: BaseEntity
     {
         public string? FullName { get; set; }
         public string? LoyaltyCardNumber { get; set; }

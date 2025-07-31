@@ -38,7 +38,7 @@ public class TransactionServiceTests
         var pumpRepo = new Mock<IPumpRepository>();
         
         pumpRepo.Setup(r => r.GetByIdAsync(1))
-            .ReturnsAsync(new Pump { Id = 1, TankId = 1, FuelType = FuelType.Diesel, CurrentVolume = 100, Status = PumpStatus.Idle });
+            .ReturnsAsync(new Pump{ Id = 1, TankId = 1, FuelType = FuelType.Diesel, CurrentVolume = 100, Status = PumpStatus.Idle });
 
         repo.Setup(r => r.AddAsync(It.IsAny<Transaction>())).Returns(Task.CompletedTask);
         repo.Setup(r => r.SaveChangesAsync()).ReturnsAsync(true);

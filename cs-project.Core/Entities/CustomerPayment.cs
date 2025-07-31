@@ -1,10 +1,8 @@
-﻿
-
-using static cs_project.Core.Entities.Enums;
+﻿using static cs_project.Core.Entities.Enums;
 
 namespace cs_project.Core.Entities
 {
-    public class CustomerPayment : BaseEntity
+    public class CustomerPayment: BaseEntity
     {
         public int TransactionId { get; set; }
         public PaymentMethod Method { get; set; }

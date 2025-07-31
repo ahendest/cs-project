@@ -1,6 +1,5 @@
 ﻿using cs_project.Core.Entities;
 using cs_project.Core.Entities.Audit;
-using cs_project.Core.Entities.History;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -23,7 +22,7 @@ namespace cs_project.Infrastructure.Data
         public DbSet<CustomerPayment> CustomerPayments => Set<CustomerPayment>();
         public DbSet<SupplierPayment> SupplierPayments => Set<SupplierPayment>();
         public DbSet<CorrectionLog> CorrectionLogs => Set<CorrectionLog>();
-        public DbSet<TransactionHistory> TransactionHistories => Set<TransactionHistory>();
+        public DbSet<Transaction> TransactionHistories => Set<Transaction>();
         public DbSet<AuditLog> AuditLogs => Set<AuditLog>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

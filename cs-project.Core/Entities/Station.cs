@@ -1,7 +1,7 @@
 ﻿
 namespace cs_project.Core.Entities
 {
-    public class Station : BaseEntity
+    public class Station: BaseEntity
     {
         public required string Name { get; set; }
         public required string Address { get; set; }

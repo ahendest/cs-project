@@ -135,9 +135,8 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ICurrentUserAccessor, CurrentUserAccessor>();
 builder.Services.AddSingleton<SaveChangesInterceptor, AuditInterceptor>();
 
-builder.Services.AddSingleton<SaveChangesInterceptor, AuditInterceptor>();
 builder.Services.AddHostedService<AuditWriterService>();
-
+builder.Services.AddSingleton<DbConnectionInterceptor, MySqlAuditConnectionInterceptor>();
 
 builder.Services.AddControllers();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());

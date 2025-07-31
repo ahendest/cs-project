@@ -1,8 +1,7 @@
-﻿namespace cs_project.Core.Entities.History;
+﻿namespace cs_project.Core.History;
 
-public class TransactionHistory
+public class TransactionHistory : HistoryBase
 {
-    // Original business fields
     public int Id { get; set; }
     public int PumpId { get; set; }
     public int? CustomerId { get; set; }
@@ -16,10 +15,4 @@ public class TransactionHistory
     public DateTime CreatedAtUtc { get; set; }
     public DateTime? UpdatedAtUtc { get; set; }
 
-    // Audit metadata
-    public long AuditId { get; set; } // PK
-    public int AuditUserId { get; set; }
-    public DateTime AuditTsUtc { get; set; }
-    public char AuditOp { get; set; } // 'U' or 'D'
-    public Guid AuditCorrelation { get; set; }
 }

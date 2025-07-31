@@ -22,7 +22,7 @@ public class PumpServiceTests
     public async Task GetPumpById_ReturnsDto()
     {
         var repo = new Mock<IPumpRepository>();
-        repo.Setup(r => r.GetByIdAsync(1)).ReturnsAsync(new Pump { Id = 1, FuelType = FuelType.LPG });
+        repo.Setup(r => r.GetByIdAsync(1)).ReturnsAsync(new Pump{ Id = 1, FuelType = FuelType.LPG });
         var service = new PumpService(repo.Object, _mapper);
 
         var result = await service.GetPumpByIdAsync(1);
@@ -34,7 +34,7 @@ public class PumpServiceTests
     [Fact]
     public async Task DeletePumpAsync_CallsRepository()
     {
-        var pump = new Pump { Id = 1 };
+        var pump = new Pump{ Id = 1 };
         var repo = new Mock<IPumpRepository>();
         repo.Setup(r => r.GetByIdAsync(1)).ReturnsAsync(pump);
         repo.Setup(r => r.SaveChangesAsync()).ReturnsAsync(true).Verifiable();
