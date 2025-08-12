@@ -1,14 +1,14 @@
 ﻿using cs_project.Core.Entities;
 using cs_project.Core.Entities.Audit;
+using cs_project.Core.History;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace cs_project.Infrastructure.Data
 {
-    public class AppDbContext : IdentityDbContext<IdentityUser>
+    public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbContext<IdentityUser>(options)
     {
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
         public DbSet<Station> Stations => Set<Station>();
         public DbSet<Tank> Tanks => Set<Tank>();
         public DbSet<Pump> Pumps => Set<Pump>();
@@ -21,9 +21,16 @@ namespace cs_project.Infrastructure.Data
         public DbSet<Transaction> Transactions => Set<Transaction>();
         public DbSet<CustomerPayment> CustomerPayments => Set<CustomerPayment>();
         public DbSet<SupplierPayment> SupplierPayments => Set<SupplierPayment>();
+        
         public DbSet<CorrectionLog> CorrectionLogs => Set<CorrectionLog>();
-        public DbSet<Transaction> TransactionHistories => Set<Transaction>();
         public DbSet<AuditLog> AuditLogs => Set<AuditLog>();
+        
+        public DbSet<TransactionHistory> TransactionHistories => Set<TransactionHistory>();
+        public DbSet<CustomerPaymentHistory> CustomerPaymentHistories => Set<CustomerPaymentHistory>();
+        public DbSet<FuelDeliveryHistory> FuelDeliveryHistories => Set<FuelDeliveryHistory>();
+        public DbSet<FuelPriceHistory> FuelPriceHistories => Set<FuelPriceHistory>();
+        public DbSet<SupplierPaymentHistory> SupplierPaymentHistories => Set<SupplierPaymentHistory>();
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

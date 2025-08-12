@@ -3,3 +3,4 @@ bin/
 obj/
 *.user
 dotnet-install.sh
+cs-project/Logs/

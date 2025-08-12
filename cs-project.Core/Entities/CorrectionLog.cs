@@ -16,7 +16,7 @@ namespace cs_project.Core.Entities
         public DateTime? ApprovedAtUtc { get; set; }
         public Guid AuditCorrelationId { get; set; }
 
-        public EmployeeHistory? RequestedBy { get; set; }
-        public EmployeeHistory? ApprovedBy { get; set; }
+        public Employee? RequestedBy { get; set; }
+        public Employee? ApprovedBy { get; set; }
     }
 }

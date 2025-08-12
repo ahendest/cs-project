@@ -9,8 +9,7 @@ namespace cs_project.Validators
         {
             RuleFor(x => x.FuelType)
                 .NotNull().WithMessage("Fuel type must not be null.")
-                .NotEmpty().WithMessage("Fuel type is required.")
-                .MaximumLength(50).WithMessage("Fuel Type must be maximum 50 characters long!");
+                .NotEmpty().WithMessage("Fuel type is required.");
             RuleFor(x => x.CurrentPrice)
                 .GreaterThan(0).WithMessage("Current price should be at least 0 Euro.");
             RuleFor(x => x.UpdatedAt)

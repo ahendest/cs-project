@@ -254,7 +254,7 @@ namespace cs_project.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("AuditLogs");
+                    b.ToTable("AuditLogs", (string)null);
                 });
 
             modelBuilder.Entity("cs_project.Core.Entities.CorrectionLog", b =>
@@ -314,7 +314,7 @@ namespace cs_project.Infrastructure.Migrations
 
                     b.HasIndex("RequestedById");
 
-                    b.ToTable("CorrectionLogs");
+                    b.ToTable("CorrectionLogs", (string)null);
                 });
 
             modelBuilder.Entity("cs_project.Core.Entities.Customer", b =>
@@ -352,7 +352,7 @@ namespace cs_project.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Customers");
+                    b.ToTable("Customers", (string)null);
                 });
 
             modelBuilder.Entity("cs_project.Core.Entities.CustomerPayment", b =>
@@ -397,7 +397,7 @@ namespace cs_project.Infrastructure.Migrations
                     b.HasIndex("TransactionId")
                         .IsUnique();
 
-                    b.ToTable("CustomerPayments");
+                    b.ToTable("CustomerPayments", (string)null);
                 });
 
             modelBuilder.Entity("cs_project.Core.Entities.Employee", b =>
@@ -443,7 +443,7 @@ namespace cs_project.Infrastructure.Migrations
 
                     b.HasIndex("StationId");
 
-                    b.ToTable("Employees");
+                    b.ToTable("Employees", (string)null);
                 });
 
             modelBuilder.Entity("cs_project.Core.Entities.FuelDelivery", b =>
@@ -496,7 +496,7 @@ namespace cs_project.Infrastructure.Migrations
 
                     b.HasIndex("TankId");
 
-                    b.ToTable("FuelDeliveries");
+                    b.ToTable("FuelDeliveries", (string)null);
                 });
 
             modelBuilder.Entity("cs_project.Core.Entities.FuelPrice", b =>
@@ -532,7 +532,7 @@ namespace cs_project.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("FuelPrices");
+                    b.ToTable("FuelPrices", (string)null);
                 });
 
             modelBuilder.Entity("cs_project.Core.Entities.History.TransactionHistory", b =>
@@ -594,7 +594,7 @@ namespace cs_project.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("TransactionHistories");
+                    b.ToTable("TransactionHistories", (string)null);
                 });
 
             modelBuilder.Entity("cs_project.Core.Entities.Pump", b =>
@@ -640,7 +640,7 @@ namespace cs_project.Infrastructure.Migrations
 
                     b.HasIndex("TankId");
 
-                    b.ToTable("Pumps");
+                    b.ToTable("Pumps", (string)null);
                 });
 
             modelBuilder.Entity("cs_project.Core.Entities.Shift", b =>
@@ -685,7 +685,7 @@ namespace cs_project.Infrastructure.Migrations
 
                     b.HasIndex("StationId");
 
-                    b.ToTable("Shifts");
+                    b.ToTable("Shifts", (string)null);
                 });
 
             modelBuilder.Entity("cs_project.Core.Entities.Station", b =>
@@ -725,7 +725,7 @@ namespace cs_project.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Stations");
+                    b.ToTable("Stations", (string)null);
                 });
 
             modelBuilder.Entity("cs_project.Core.Entities.Supplier", b =>
@@ -767,7 +767,7 @@ namespace cs_project.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Suppliers");
+                    b.ToTable("Suppliers", (string)null);
                 });
 
             modelBuilder.Entity("cs_project.Core.Entities.SupplierPayment", b =>
@@ -809,7 +809,7 @@ namespace cs_project.Infrastructure.Migrations
                     b.HasIndex("FuelDeliveryId")
                         .IsUnique();
 
-                    b.ToTable("SupplierPayments");
+                    b.ToTable("SupplierPayments", (string)null);
                 });
 
             modelBuilder.Entity("cs_project.Core.Entities.Tank", b =>
@@ -853,7 +853,7 @@ namespace cs_project.Infrastructure.Migrations
 
                     b.HasIndex("StationId");
 
-                    b.ToTable("Tanks");
+                    b.ToTable("Tanks", (string)null);
                 });
 
             modelBuilder.Entity("cs_project.Core.Entities.Transaction", b =>
@@ -911,7 +911,7 @@ namespace cs_project.Infrastructure.Migrations
 
                     b.HasIndex("ShiftId");
 
-                    b.ToTable("Transactions");
+                    b.ToTable("Transactions", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

@@ -22,8 +22,8 @@ public class FuelPriceServiceTests
     public async Task GetAllAsync_ReturnsAllDtos()
     {
         var prices = new List<FuelPrice> {
-        new FuelPrice { Id = 1, FuelType = FuelType.Diesel, CurrentPrice = 1.0 },
-        new FuelPrice { Id = 2, FuelType = FuelType.LPG, CurrentPrice = 2.0 }
+        new() { Id = 1, FuelType = FuelType.Diesel, CurrentPrice = 1.0 },
+        new() { Id = 2, FuelType = FuelType.LPG, CurrentPrice = 2.0 }
         };
         var repo = new Mock<IFuelPriceRepository>();
         repo.Setup(r => r.GetAllAsync()).ReturnsAsync(prices);
@@ -53,7 +53,7 @@ public class FuelPriceServiceTests
         repo.Setup(r => r.AddAsync(It.IsAny<FuelPrice>())).Returns(Task.CompletedTask).Verifiable();
         repo.Setup(r => r.SaveChangesAsync()).ReturnsAsync(true).Verifiable();
         var service = new FuelPriceService(repo.Object, _mapper);
-        var dto = new FuelPriceCreateDTO { FuelType = "A", CurrentPrice = 1.2, UpdatedAt = DateTime.Now };
+        var dto = new FuelPriceCreateDTO { FuelType = FuelType.Petrol98, CurrentPrice = 1.2, UpdatedAt = DateTime.Now };
 
         var result = await service.CreateAsync(dto);
 

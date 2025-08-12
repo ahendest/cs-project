@@ -1,19 +1,20 @@
 ﻿using cs_project.Core.DTOs;
 using cs_project.Validators;
 using Xunit;
+using static cs_project.Core.Entities.Enums;
 
 namespace cs_project.Tests.Validators
 {
     public class FuelPriceCreateDTOValidatorTests
     {
-        private readonly FuelPriceCreateDTOValidator _validator = new FuelPriceCreateDTOValidator();
+        private readonly FuelPriceCreateDTOValidator _validator = new ();
 
         [Fact]
         public void Should_Pass_When_Valid()
         {
             var dto = new FuelPriceCreateDTO
             {
-                FuelType = "Diesel",
+                FuelType = FuelType.Petrol98,
                 CurrentPrice = 1.10,
                 UpdatedAt = DateTime.UtcNow
             };
@@ -29,7 +30,7 @@ namespace cs_project.Tests.Validators
         {
             var dto = new FuelPriceCreateDTO
             {
-                FuelType = "",
+                FuelType = FuelType.Petrol98,
                 CurrentPrice = 1.10,
                 UpdatedAt = DateTime.UtcNow
             };
@@ -45,7 +46,7 @@ namespace cs_project.Tests.Validators
         {
             var dto = new FuelPriceCreateDTO
             {
-                FuelType = "Diesel",
+                FuelType = FuelType.Petrol98,
                 CurrentPrice = 0,
                 UpdatedAt = DateTime.UtcNow
             };
@@ -61,7 +62,7 @@ namespace cs_project.Tests.Validators
         {
             var dto = new FuelPriceCreateDTO
             {
-                FuelType = "Diesel",
+                FuelType = FuelType.Petrol98,
                 CurrentPrice = 0,
                 UpdatedAt = DateTime.UtcNow.AddMinutes(10)
             };
