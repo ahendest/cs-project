@@ -7,7 +7,6 @@ using cs_project.Infrastructure.Mapping;
 using cs_project.Infrastructure.Repositories;
 using cs_project.Infrastructure.Services;
 using cs_project.Options;
-using cs_project.Validators;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -35,11 +34,16 @@ if (!builder.Environment.IsDevelopment())
     }
 }
 
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseMySql(
+
+builder.Services.AddDbContext<AppDbContext>((serviceProvider, opts) =>
+{
+    opts.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection"),
-        new MySqlServerVersion(new Version(8, 0))
-    ));
+        sql => sql.EnableRetryOnFailure()
+    );
+    opts.AddInterceptors(serviceProvider.GetRequiredService<AuditInterceptor>());
+});
+
 
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>()
@@ -117,26 +121,22 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Lockout.AllowedForNewUsers = true;
 });
 builder.Services.AddValidatorsFromAssemblyContaining<PumpCreateDTOValidator>();
-builder.Services.AddValidatorsFromAssemblyContaining<TransactionCreateDTOValidator>();
-builder.Services.AddValidatorsFromAssemblyContaining<FuelPriceCreateDTOValidator>();
 
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
-builder.Services.AddScoped<IPumpRepository, PumpRepository>();
-builder.Services.AddScoped<IPumpService, PumpService>();
+//builder.Services.AddScoped<IPumpRepository, PumpRepository>();
+//builder.Services.AddScoped<IPumpService, PumpService>();
 
-builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
-builder.Services.AddScoped<ITransactionService, TransactionService>();
+builder.Services.AddScoped<IStationFuelPriceRepository, StationFuelPriceRepository>();
 
-builder.Services.AddScoped<IFuelPriceRepository, FuelPriceRepository>();
-builder.Services.AddScoped<IFuelPriceService, FuelPriceService>();
+builder.Services.AddScoped<ISalesService, SalesService>();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ICurrentUserAccessor, CurrentUserAccessor>();
 builder.Services.AddSingleton<SaveChangesInterceptor, AuditInterceptor>();
 
 builder.Services.AddHostedService<AuditWriterService>();
-builder.Services.AddSingleton<DbConnectionInterceptor, MySqlAuditConnectionInterceptor>();
+builder.Services.AddSingleton<AuditInterceptor>();
 
 builder.Services.AddControllers();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
@@ -176,11 +176,11 @@ if (string.IsNullOrEmpty(connectionString))
     throw new InvalidOperationException("The connection string 'DefaultConnection' is not configured.");
 }
 
-builder.Services.AddHealthChecks()
-    .AddMySql(
-        connectionString,
-        name: "mysql",
-        timeout: TimeSpan.FromSeconds(5));
+//builder.Services.AddHealthChecks()
+//    .AddSqlServer(
+//        connectionString,
+//        name: "sqlserver",
+//        timeout: TimeSpan.FromSeconds(5));
 
 
 var app = builder.Build();

@@ -6,12 +6,11 @@ namespace cs_project.Core.Entities
     {
         public int StationId { get; set; }
         public FuelType FuelType { get; set; }
-        public double CapacityLiters { get; set; }
-        public double CurrentVolumeLiters { get; set; }
+        public decimal CapacityLiters { get; set; }
+        public decimal CurrentVolumeLiters { get; set; }
         public DateTime? LastRefilledAtUtc { get; set; }
 
-        public Station? Station { get; set; }
+        public Station Station { get; set; } = null!;
         public ICollection<Pump> Pumps { get; set; } = [];
-        public ICollection<FuelDelivery> FuelDeliveries { get; set; } = [];
     }
 }

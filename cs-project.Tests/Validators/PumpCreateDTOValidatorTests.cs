@@ -1,6 +1,5 @@
 ﻿using System;
 using cs_project.Core.DTOs;
-using cs_project.Validators;
 using Xunit;
 
 public class PumpCreateDTOValidatorTests

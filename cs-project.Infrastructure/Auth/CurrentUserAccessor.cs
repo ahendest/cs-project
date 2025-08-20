@@ -4,16 +4,17 @@ using System.Security.Claims;
 
 namespace cs_project.Infrastructure.Auth
 {
-    public class CurrentUserAccessor : ICurrentUserAccessor
+    public class CurrentUserAccessor(IHttpContextAccessor http) : ICurrentUserAccessor
     {
-        private readonly IHttpContextAccessor _http;
-
-        public CurrentUserAccessor(IHttpContextAccessor http) => _http = http;
+        private readonly IHttpContextAccessor _http = http;
 
         public long GetCurrentUserId()
         {
-            var claim = _http.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier);
-            return long.TryParse(claim?.Value, out var id) ? id : throw new UnauthorizedAccessException("User ID not found.");
+            var user = _http.HttpContext?.User;
+            if (user == null || !user.Identity?.IsAuthenticated == true) return 0;
+
+            var id = user.FindFirst("sub")?.Value ?? user.FindFirst("userid")?.Value;
+            return long.TryParse(id, out var lid) ? lid : 0;
         }
     }
 }

@@ -28,9 +28,7 @@ public class AppDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
         }
 
         var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
-        optionsBuilder.UseMySql(connStr, 
-                                ServerVersion.AutoDetect(connStr),
-                                b => b.MigrationsAssembly("cs-project.Infrastructure"));
+        optionsBuilder.UseSqlServer(connStr, b => b.MigrationsAssembly("cs-project.Infrastructure"));
 
         return new AppDbContext(optionsBuilder.Options);
     }

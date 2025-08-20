@@ -11,13 +11,6 @@ namespace cs_project.Infrastructure.Mapping
         {
             CreateMap<Pump, PumpDTO>().ReverseMap();
             CreateMap<Pump, PumpCreateDTO>().ReverseMap();
-
-            CreateMap<Transaction, TransactionsDTO>().ReverseMap();
-            CreateMap<Transaction, TransactionsCreateDTO>().ReverseMap();
-
-            CreateMap<FuelPrice, FuelPriceDTO>().ReverseMap();
-            CreateMap<FuelPrice, FuelPriceCreateDTO>().ReverseMap();
-
         }
     }
 }
