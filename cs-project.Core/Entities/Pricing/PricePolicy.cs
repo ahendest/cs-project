@@ -14,7 +14,7 @@ namespace cs_project.Core.Entities.Pricing
         public decimal RoundingIncrement { get; set; } = 0.01m;
         public RoundingMode RoundingMode { get; set; } = RoundingMode.Round;
         public DateTime EffectiveFromUtc { get; set; } = DateTime.UtcNow;
-        public DateTime EffectiveToUtc { get; set; }
+        public DateTime? EffectiveToUtc { get; set; }
         public int Priority { get; set; } = 0;
         
         public Station? Station { get; set; }
