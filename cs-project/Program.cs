@@ -64,7 +64,7 @@ builder.Services.AddAuthentication(options =>
     {
         OnAuthenticationFailed = ctx =>
         {
-            Console.WriteLine("JWT failure: " + ctx.Exception.ToString());
+            Log.Error(ctx.Exception, "JWT failure");
             return Task.CompletedTask;
         }
     };
@@ -127,9 +127,24 @@ builder.Services.AddAutoMapper(typeof(MappingProfile));
 builder.Services.AddScoped<IPumpRepository, PumpRepository>();
 builder.Services.AddScoped<IPumpService, PumpService>();
 
+builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+
+builder.Services.AddScoped<IPricePolicyRepository, PricePolicyRepository>();
+builder.Services.AddScoped<IPricingService, PricingService>();
+
+builder.Services.AddScoped<IShiftRepository, ShiftRepository>();
+builder.Services.AddScoped<IShiftService, ShiftService>();
+
+builder.Services.AddScoped<ISupplierRepository, SupplierRepository>();
+builder.Services.AddScoped<ISupplierService, SupplierService>();
+
 builder.Services.AddScoped<IStationFuelPriceRepository, StationFuelPriceRepository>();
 
 builder.Services.AddScoped<ISalesService, SalesService>();
+
+builder.Services.AddScoped<IExchangeRateRepository, ExchangeRateRepository>();
+builder.Services.AddScoped<ISupplierCostRepository, SupplierCostRepository>();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ICurrentUserAccessor, CurrentUserAccessor>();
@@ -207,10 +222,11 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.MapHealthChecks("/healthz");  
-Console.WriteLine("JWT VALIDATION SETTINGS:");
-Console.WriteLine("Issuer: " + builder.Configuration["Jwt:Issuer"]);
-Console.WriteLine("Audience: " + builder.Configuration["Jwt:Audience"]);
-Console.WriteLine("Key length: " + builder.Configuration["Jwt:Key"]?.Length);
+app.MapHealthChecks("/healthz");
+Log.Debug(
+    "JWT VALIDATION SETTINGS: Issuer {Issuer}, Audience {Audience}, Key length {KeyLength}",
+    builder.Configuration["Jwt:Issuer"],
+    builder.Configuration["Jwt:Audience"],
+    builder.Configuration["Jwt:Key"]?.Length);
 
 app.Run();
