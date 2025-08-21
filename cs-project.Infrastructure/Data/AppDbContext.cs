@@ -66,7 +66,7 @@ namespace cs_project.Infrastructure.Data
 
                 // indexes oftenly use
 
-                model.Entity(et.ClrType).HasIndex("CreatedUtc");
+                model.Entity(et.ClrType).HasIndex("CreatedAtUtc");
                 model.Entity(et.ClrType).HasIndex("IsActive");
             }
 
