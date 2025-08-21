@@ -34,7 +34,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\cs-project\cs-project.API.csproj" />
+    <ProjectReference Include="..\cs-project\cs-project.csproj" />
     <ProjectReference Include="..\cs-project.Core\cs-project.Core.csproj" />
     <ProjectReference Include="..\cs-project.Infrastructure\cs-project.Infrastructure.csproj" />
   </ItemGroup>
