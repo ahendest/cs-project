@@ -13,6 +13,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
@@ -59,12 +61,21 @@ builder.Services.AddAuthentication(options =>
 })
 .AddJwtBearer(options =>
 {
-    options.IncludeErrorDetails = true;
+    options.IncludeErrorDetails = builder.Environment.IsDevelopment();
     options.Events = new JwtBearerEvents
     {
         OnAuthenticationFailed = ctx =>
         {
-            Log.Error(ctx.Exception, "JWT failure");
+            var logger = ctx.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
+            var env = ctx.HttpContext.RequestServices.GetRequiredService<IHostEnvironment>();
+            if (env.IsDevelopment())
+            {
+                logger.LogError(ctx.Exception, "JWT authentication failure");
+            }
+            else
+            {
+                logger.LogError("JWT authentication failure");
+            }
             return Task.CompletedTask;
         }
     };

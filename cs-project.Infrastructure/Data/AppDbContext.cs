@@ -90,8 +90,8 @@ namespace cs_project.Infrastructure.Data
                 e.HasOne(p => p.Tank).WithMany(t => t.Pumps).HasForeignKey(p => p.TankId);
                 e.Property(p => p.Status).HasConversion<int>();
                 e.Property(p => p.CurrentVolume).HasColumnType("decimal(18,3)");
-                // A Pump has many CustomerTransactions (fixed from your note)
-                e.HasMany<CustomerTransaction>()
+                // A Pump has many CustomerTransactions 
+                e.HasMany(p => p.CustomerTransactions)
                  .WithOne(ct => ct.Pump)
                  .HasForeignKey(ct => ct.PumpId);
             });

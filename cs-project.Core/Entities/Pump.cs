@@ -10,6 +10,6 @@ namespace cs_project.Core.Entities
         public PumpStatus Status { get; set; } = PumpStatus.Idle;
 
         public Tank Tank { get; set; } = null!;
-        public ICollection<CustomerTransaction> CustomerTransaction { get; set; } = [];
+        public ICollection<CustomerTransaction> CustomerTransactions { get; set; } = [];
     }
 }
