@@ -154,6 +154,12 @@ builder.Services.AddScoped<IStationFuelPriceRepository, StationFuelPriceReposito
 
 builder.Services.AddScoped<ISalesService, SalesService>();
 
+builder.Services.AddScoped<IStationRepository, StationRepository>();
+builder.Services.AddScoped<IStationService, StationService>();
+
+builder.Services.AddScoped<ICustomerTransactionRepository, CustomerTransactionRepository>();
+builder.Services.AddScoped<ICustomerTransactionService, CustomerTransactionService>();
+
 builder.Services.AddScoped<IExchangeRateRepository, ExchangeRateRepository>();
 builder.Services.AddScoped<ISupplierCostRepository, SupplierCostRepository>();
 
