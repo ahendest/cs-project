@@ -139,7 +139,6 @@ builder.Services.AddHostedService<AuditWriterService>();
 builder.Services.AddSingleton<AuditInterceptor>();
 
 builder.Services.AddControllers();
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen(options =>
