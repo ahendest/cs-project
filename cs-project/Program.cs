@@ -124,8 +124,8 @@ builder.Services.AddValidatorsFromAssemblyContaining<PumpCreateDTOValidator>();
 
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
-//builder.Services.AddScoped<IPumpRepository, PumpRepository>();
-//builder.Services.AddScoped<IPumpService, PumpService>();
+builder.Services.AddScoped<IPumpRepository, PumpRepository>();
+builder.Services.AddScoped<IPumpService, PumpService>();
 
 builder.Services.AddScoped<IStationFuelPriceRepository, StationFuelPriceRepository>();
 
