@@ -120,7 +120,7 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Lockout.MaxFailedAccessAttempts = 5;
     options.Lockout.AllowedForNewUsers = true;
 });
-builder.Services.AddValidatorsFromAssemblyContaining<PumpCreateDTOValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<AuditLogCreateDTOValidator>();
 
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
