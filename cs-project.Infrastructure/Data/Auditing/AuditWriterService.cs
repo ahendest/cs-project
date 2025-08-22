@@ -1,5 +1,6 @@
 ﻿using cs_project.Core.Entities.Audit;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Threading.Channels;
 
@@ -8,7 +9,9 @@ namespace cs_project.Infrastructure.Data.Auditing
 {
     public class AuditWriterService : BackgroundService
     {
-        private readonly IDbContextFactory<AppDbContext> _factory;
+        //private readonly IDbContextFactory<AppDbContext> _factory;
+
+        private readonly IServiceScopeFactory _scopeFactory;
         private static readonly TimeSpan _flushInterval = TimeSpan.FromSeconds(2);
 
         public static readonly Channel<AuditLog> Queue =
@@ -18,8 +21,8 @@ namespace cs_project.Infrastructure.Data.Auditing
                 FullMode = BoundedChannelFullMode.Wait
             });
 
-        public AuditWriterService(IDbContextFactory<AppDbContext> factory)
-            => _factory = factory;
+        public AuditWriterService(IServiceScopeFactory scopeFactory)
+            => _scopeFactory = scopeFactory;
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
@@ -32,8 +35,9 @@ namespace cs_project.Infrastructure.Data.Auditing
 
                 if (batch.Count > 0)
                 {
-                    // Create a fresh DbContext instance per batch
-                    await using var db = await _factory.CreateDbContextAsync(stoppingToken);
+                    using var scope = _scopeFactory.CreateScope();
+                    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+                    
                     db.AuditLogs.AddRange(batch);
                     await db.SaveChangesAsync(stoppingToken);
                     batch.Clear();

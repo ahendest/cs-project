@@ -12,9 +12,6 @@ using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
@@ -24,6 +21,12 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 
 var allowedOrigins = builder.Configuration.GetSection("AllowedOrigins").Get<string[]>();
+
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+if (string.IsNullOrEmpty(connectionString))
+{
+    throw new InvalidOperationException("The connection string 'DefaultConnection' is not configured.");
+}
 
 if (!builder.Environment.IsDevelopment())
 {
@@ -36,6 +39,11 @@ if (!builder.Environment.IsDevelopment())
     }
 }
 
+builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddScoped<ICurrentUserAccessor, CurrentUserAccessor>();
+builder.Services.AddScoped<AuditInterceptor>();
+
 
 builder.Services.AddDbContext<AppDbContext>((serviceProvider, opts) =>
 {
@@ -43,13 +51,20 @@ builder.Services.AddDbContext<AppDbContext>((serviceProvider, opts) =>
         builder.Configuration.GetConnectionString("DefaultConnection"),
         sql => sql.EnableRetryOnFailure()
     );
+    opts.UseSqlServer(connectionString, sql =>
+    {
+        sql.MigrationsAssembly("cs_project.Infrastructure"); 
+    });
     opts.AddInterceptors(serviceProvider.GetRequiredService<AuditInterceptor>());
 });
 
 
+builder.Services.AddHostedService<AuditWriterService>();
+
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
+
 
 
 builder.Services.AddAuthentication(options =>
@@ -163,13 +178,6 @@ builder.Services.AddScoped<ICustomerTransactionService, CustomerTransactionServi
 builder.Services.AddScoped<IExchangeRateRepository, ExchangeRateRepository>();
 builder.Services.AddScoped<ISupplierCostRepository, SupplierCostRepository>();
 
-builder.Services.AddHttpContextAccessor();
-builder.Services.AddScoped<ICurrentUserAccessor, CurrentUserAccessor>();
-builder.Services.AddSingleton<SaveChangesInterceptor, AuditInterceptor>();
-
-builder.Services.AddHostedService<AuditWriterService>();
-builder.Services.AddSingleton<AuditInterceptor>();
-
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
@@ -201,22 +209,8 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-if (string.IsNullOrEmpty(connectionString))
-{
-    throw new InvalidOperationException("The connection string 'DefaultConnection' is not configured.");
-}
-
-//builder.Services.AddHealthChecks()
-//    .AddSqlServer(
-//        connectionString,
-//        name: "sqlserver",
-//        timeout: TimeSpan.FromSeconds(5));
-
-
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -239,11 +233,5 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.MapHealthChecks("/healthz");
-Log.Debug(
-    "JWT VALIDATION SETTINGS: Issuer {Issuer}, Audience {Audience}, Key length {KeyLength}",
-    builder.Configuration["Jwt:Issuer"],
-    builder.Configuration["Jwt:Audience"],
-    builder.Configuration["Jwt:Key"]?.Length);
 
 app.Run();
