@@ -1,14 +1,20 @@
-# cs-project
+# ⛽ cs-project
 
-This repository contains a simple ASP.NET Core solution. Unit tests are provided using **xUnit** and **Moq**.
+ASP.NET Core 9 API for managing stations, pumps, sales and suppliers.
 
-## Running tests
+## 🚀 What's inside
+- `cs-project` – Web API entry point.
+- `cs-project.Core` – entities, DTOs & validators.
+- `cs-project.Infrastructure` – EF Core persistence & services.
+- `cs-project.Tests` – xUnit & Moq tests.
 
-Use the `dotnet test` command from the repository root:
-
+## 🛠️ Quick start
 ```bash
-cd /path/to/repo
- dotnet test
+ dotnet restore
+ dotnet build
+ dotnet run --project cs-project        # start API
+ dotnet test                            # run tests
 ```
 
-The command restores packages, builds the solution and executes all tests.
+## 🤝 Contributing
+Got an idea? Open an issue or PR! ✨
