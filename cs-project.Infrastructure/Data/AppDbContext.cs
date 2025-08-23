@@ -79,7 +79,7 @@ namespace cs_project.Infrastructure.Data
 
             // ---------- Tank ----------
             model.Entity<Tank>(e => {
-                e.HasOne(t => t.Station).WithMany(s => s.Tanks).HasForeignKey(t => t.StationId);
+                e.HasOne(t => t.Station).WithMany(s => s.Tanks).HasForeignKey(t => t.StationId).OnDelete(DeleteBehavior.NoAction);
                 e.Property(t => t.FuelType).HasConversion<int>();
                 e.Property(t => t.CapacityLiters).HasColumnType("decimal(18,3)");
                 e.Property(t => t.CurrentVolumeLiters).HasColumnType("decimal(18,3)");
@@ -185,9 +185,10 @@ namespace cs_project.Infrastructure.Data
             model.Entity<SupplierInvoiceLine>(e =>
             {
                 e.HasOne(l => l.SupplierInvoice).WithMany(si => si.Lines)
-                  .HasForeignKey(l => l.SupplierInvoiceId).IsRequired();
-
-                e.HasOne(l => l.Tank).WithMany().HasForeignKey(l => l.TankId).IsRequired();
+                  .HasForeignKey(l => l.SupplierInvoiceId).IsRequired()
+                  .OnDelete(DeleteBehavior.NoAction).IsRequired();
+                e.HasOne(l => l.Tank).WithMany().HasForeignKey(l => l.TankId)
+                  .OnDelete(DeleteBehavior.NoAction).IsRequired();
 
                 e.Property(l => l.FuelType).HasConversion<int>();
                 e.Property(l => l.QuantityLiters).HasColumnType("decimal(18,3)");
@@ -222,7 +223,8 @@ namespace cs_project.Infrastructure.Data
             model.Entity<SupplierPaymentApply>(e =>
             {
                 e.HasOne(a => a.SupplierPayment).WithMany(p => p.Applies)
-                  .HasForeignKey(a => a.SupplierPaymentId).IsRequired();
+                  .HasForeignKey(a => a.SupplierPaymentId).IsRequired()
+                  .OnDelete(DeleteBehavior.NoAction);
 
                 e.HasOne(a => a.SupplierInvoice).WithMany(i => i.Applies)
                   .HasForeignKey(a => a.SupplierInvoiceId).IsRequired();

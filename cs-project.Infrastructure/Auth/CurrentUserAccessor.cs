@@ -1,6 +1,5 @@
 ﻿using cs_project.Core.Interfaces;
 using Microsoft.AspNetCore.Http;
-using System.Security.Claims;
 
 namespace cs_project.Infrastructure.Auth
 {
