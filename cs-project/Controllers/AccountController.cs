@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.Extensions.Logging;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -11,7 +12,7 @@ namespace cs_project.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class AccountController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, IConfiguration configuration) : ControllerBase
+    public class AccountController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, IConfiguration configuration, ILogger<AccountController> logger) : ControllerBase
     {
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterDTO model)
@@ -53,9 +54,8 @@ namespace cs_project.Controllers
                 signingCredentials: creds);
 
             var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
-            Console.WriteLine("ISSUER: " + configuration["Jwt:Issuer"]);
-            Console.WriteLine("AUDIENCE: " + configuration["Jwt:Audience"]);
-            Console.WriteLine("KEY LENGTH: " + configuration["Jwt:Key"]?.Length);
+            logger.LogInformation("Issuer: {Issuer}", configuration["Jwt:Issuer"]);
+            logger.LogInformation("Audience: {Audience}", configuration["Jwt:Audience"]);
 
             return Ok(new { token = tokenString });
         }
@@ -107,17 +107,5 @@ namespace cs_project.Controllers
             return NoContent();
         }
 
-        public class RegisterDTO
-        {
-            public required string UserName { get; set; }
-            public required string Email { get; set; }
-            public required string Password { get; set; }
-        }
-
-        public class LoginDTO
-        {
-            public required string UserName { get; set; }
-            public required string Password { get; set; }
-        }
     }
 }
