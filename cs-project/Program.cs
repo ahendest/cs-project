@@ -1,11 +1,10 @@
 using Azure.Identity;
 using cs_project.Core.Interfaces;
+using cs_project.Infrastructure;
 using cs_project.Infrastructure.Auth;
 using cs_project.Infrastructure.Data;
 using cs_project.Infrastructure.Data.Auditing;
 using cs_project.Infrastructure.Mapping;
-using cs_project.Infrastructure.Repositories;
-using cs_project.Infrastructure.Services;
 using cs_project.Options;
 using FluentValidation;
 using FluentValidation.AspNetCore;
@@ -152,59 +151,8 @@ builder.Services.AddValidatorsFromAssemblyContaining<AuditLogCreateDTOValidator>
 
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
-builder.Services.AddScoped<IAuditLogRepository, AuditLogRepository>();
-builder.Services.AddScoped<IAuditLogService, AuditLogService>();
-builder.Services.AddScoped<ICorrectionLogRepository, CorrectionLogRepository>();
-builder.Services.AddScoped<ICorrectionLogService, CorrectionLogService>();
-
-builder.Services.AddScoped<IPumpRepository, PumpRepository>();
-builder.Services.AddScoped<IPumpService, PumpService>();
-
-builder.Services.AddScoped<ITankRepository, TankRepository>();
-builder.Services.AddScoped<ITankService, TankService>();
-
-builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
-builder.Services.AddScoped<IEmployeeService, EmployeeService>();
-
-builder.Services.AddScoped<IPricePolicyRepository, PricePolicyRepository>();
-builder.Services.AddScoped<IPricePolicyService, PricePolicyService>();
-builder.Services.AddScoped<IPricingService, PricingService>();
-
-builder.Services.AddScoped<IShiftRepository, ShiftRepository>();
-builder.Services.AddScoped<IShiftService, ShiftService>();
-
-builder.Services.AddScoped<IShiftEmployeeRepository, ShiftEmployeeRepository>();
-builder.Services.AddScoped<IShiftEmployeeService, ShiftEmployeeService>();
-
-builder.Services.AddScoped<ISupplierRepository, SupplierRepository>();
-builder.Services.AddScoped<ISupplierService, SupplierService>();
-
-builder.Services.AddScoped<ISupplierInvoiceRepository, SupplierInvoiceRepository>();
-builder.Services.AddScoped<ISupplierInvoiceService, SupplierInvoiceService>();
-
-builder.Services.AddScoped<ISupplierInvoiceLineRepository, SupplierInvoiceLineRepository>();
-builder.Services.AddScoped<ISupplierInvoiceLineService, SupplierInvoiceLineService>();
-
-builder.Services.AddScoped<ISupplierPaymentRepository, SupplierPaymentRepository>();
-builder.Services.AddScoped<ISupplierPaymentService, SupplierPaymentService>();
-
-builder.Services.AddScoped<ISupplierPaymentApplyRepository, SupplierPaymentApplyRepository>();
-builder.Services.AddScoped<ISupplierPaymentApplyService, SupplierPaymentApplyService>();
-
-builder.Services.AddScoped<IStationFuelPriceRepository, StationFuelPriceRepository>();
-builder.Services.AddScoped<IStationFuelPriceService, StationFuelPriceService>();
-
-builder.Services.AddScoped<ISalesService, SalesService>();
-
-builder.Services.AddScoped<IStationRepository, StationRepository>();
-builder.Services.AddScoped<IStationService, StationService>();
-
-builder.Services.AddScoped<ICustomerTransactionRepository, CustomerTransactionRepository>();
-builder.Services.AddScoped<ICustomerTransactionService, CustomerTransactionService>();
-
-builder.Services.AddScoped<IExchangeRateRepository, ExchangeRateRepository>();
-builder.Services.AddScoped<IExchangeRateService, ExchangeRateService>();
-builder.Services.AddScoped<ISupplierCostRepository, SupplierCostRepository>();
+builder.Services.AddRepositories();
+builder.Services.AddBusinessServices();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
