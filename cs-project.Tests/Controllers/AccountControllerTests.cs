@@ -3,25 +3,23 @@ using cs_project.Core.DTOs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using System.Collections.Generic;
+using Microsoft.Extensions.Options;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 using Moq;
 using Xunit;
+using cs_project.Options;
 
 namespace cs_project.Tests.Controllers;
 
 public class AccountControllerTests
 {
-    private static IConfiguration BuildConfig() => new ConfigurationBuilder()
-        .AddInMemoryCollection(new Dictionary<string, string?>
-        {
-            {"Jwt:Key", "01234567890123456789012345678901"},
-            {"Jwt:Issuer", "issuer"},
-            {"Jwt:Audience", "audience"}
-        })
-        .Build();
+    private static IOptions<JwtOptions> BuildOptions() => Microsoft.Extensions.Options.Options.Create(new JwtOptions
+    {
+        Key = "01234567890123456789012345678901",
+        Issuer = "issuer",
+        Audience = "audience"
+    });
 
     private static Mock<UserManager<IdentityUser>> MockUserManager()
     {
@@ -41,7 +39,7 @@ public class AccountControllerTests
         var um = MockUserManager();
         var sm = MockSignInManager(um.Object);
         um.Setup(u => u.CreateAsync(It.IsAny<IdentityUser>(), It.IsAny<string>())).ReturnsAsync(IdentityResult.Success);
-        var controller = new AccountController(um.Object, sm.Object, BuildConfig(), Mock.Of<ILogger<AccountController>>());
+        var controller = new AccountController(um.Object, sm.Object, BuildOptions(), Mock.Of<ILogger<AccountController>>());
 
         var result = await controller.Register(new RegisterDTO { UserName = "u", Email = "e", Password = "p" });
 
@@ -54,7 +52,7 @@ public class AccountControllerTests
         var um = MockUserManager();
         var sm = MockSignInManager(um.Object);
         um.Setup(u => u.CreateAsync(It.IsAny<IdentityUser>(), It.IsAny<string>())).ReturnsAsync(IdentityResult.Failed());
-        var controller = new AccountController(um.Object, sm.Object, BuildConfig(), Mock.Of<ILogger<AccountController>>());
+        var controller = new AccountController(um.Object, sm.Object, BuildOptions(), Mock.Of<ILogger<AccountController>>());
 
         var result = await controller.Register(new RegisterDTO { UserName = "u", Email = "e", Password = "p" });
 
@@ -69,7 +67,7 @@ public class AccountControllerTests
         um.Setup(u => u.FindByNameAsync("u")).ReturnsAsync(user);
         var sm = MockSignInManager(um.Object);
         sm.Setup(s => s.PasswordSignInAsync(user, "p", false, true)).ReturnsAsync(SignInResult.Success);
-        var controller = new AccountController(um.Object, sm.Object, BuildConfig(), Mock.Of<ILogger<AccountController>>());
+        var controller = new AccountController(um.Object, sm.Object, BuildOptions(), Mock.Of<ILogger<AccountController>>());
 
         var result = await controller.Login(new LoginDTO { UserName = "u", Password = "p" });
 
@@ -86,7 +84,7 @@ public class AccountControllerTests
         um.Setup(u => u.FindByNameAsync("u")).ReturnsAsync(user);
         var sm = MockSignInManager(um.Object);
         sm.Setup(s => s.PasswordSignInAsync(user, "p", false, true)).ReturnsAsync(SignInResult.Failed);
-        var controller = new AccountController(um.Object, sm.Object, BuildConfig(), Mock.Of<ILogger<AccountController>>());
+        var controller = new AccountController(um.Object, sm.Object, BuildOptions(), Mock.Of<ILogger<AccountController>>());
 
         var result = await controller.Login(new LoginDTO { UserName = "u", Password = "p" });
 
