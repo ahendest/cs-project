@@ -47,12 +47,10 @@ builder.Services.AddScoped<AuditInterceptor>();
 
 builder.Services.AddDbContext<AppDbContext>((serviceProvider, opts) =>
 {
-    opts.UseSqlServer(
-        builder.Configuration.GetConnectionString("DefaultConnection"),
-        sql => sql.EnableRetryOnFailure()
-    );
+ 
     opts.UseSqlServer(connectionString, sql =>
     {
+        sql.EnableRetryOnFailure();
         sql.MigrationsAssembly("cs_project.Infrastructure"); 
     });
     opts.AddInterceptors(serviceProvider.GetRequiredService<AuditInterceptor>());
