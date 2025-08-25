@@ -42,4 +42,36 @@ public class SalesServiceTests
 
         await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => service.CreateSaleAsync(1, 0m, CancellationToken.None));
     }
+
+    [Fact]
+    public async Task GetUpdateDelete_Works()
+    {
+        var options = new DbContextOptionsBuilder<AppDbContext>().UseInMemoryDatabase("sales_ops").Options;
+        using var db = new AppDbContext(options);
+        db.Stations.Add(new Station { Id = 1, Name = "S", Address = "A" });
+        db.Tanks.Add(new Tank { Id = 1, StationId = 1, FuelType = FuelType.Diesel });
+        db.Pumps.Add(new Pump { Id = 1, TankId = 1 });
+        await db.SaveChangesAsync();
+
+        var priceRepo = new Mock<IStationFuelPriceRepository>();
+        priceRepo.Setup(r => r.GetCurrentAsync(1, FuelType.Diesel, It.IsAny<DateTime>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new StationFuelPrice { Id = 1, PriceRon = 5m });
+
+        var service = new SalesService(db, priceRepo.Object);
+        var created = await service.CreateSaleAsync(1, 10m, CancellationToken.None);
+
+        var list = await service.GetSalesAsync(CancellationToken.None);
+        Assert.Single(list);
+
+        var fetched = await service.GetSaleByIdAsync(created.Id, CancellationToken.None);
+        Assert.NotNull(fetched);
+
+        var updated = await service.UpdateSaleAsync(created.Id, 1, 20m, CancellationToken.None);
+        Assert.True(updated);
+        Assert.Equal(20m, (await service.GetSaleByIdAsync(created.Id, CancellationToken.None))!.Liters);
+
+        var deleted = await service.DeleteSaleAsync(created.Id, CancellationToken.None);
+        Assert.True(deleted);
+        Assert.Empty(await service.GetSalesAsync(CancellationToken.None));
+    }
 }
