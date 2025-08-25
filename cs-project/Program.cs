@@ -108,7 +108,11 @@ builder.Services.AddAuthentication(options =>
 });
 
 
-builder.Services.AddAuthorization();
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("ViewAuditLogs", policy => policy.RequireRole("Admin"));
+    options.AddPolicy("ViewCorrectionLogs", policy => policy.RequireRole("Admin"));
+});
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
@@ -149,6 +153,11 @@ builder.Services.Configure<IdentityOptions>(options =>
 builder.Services.AddValidatorsFromAssemblyContaining<AuditLogCreateDTOValidator>();
 
 builder.Services.AddAutoMapper(typeof(MappingProfile));
+
+builder.Services.AddScoped<IAuditLogRepository, AuditLogRepository>();
+builder.Services.AddScoped<IAuditLogService, AuditLogService>();
+builder.Services.AddScoped<ICorrectionLogRepository, CorrectionLogRepository>();
+builder.Services.AddScoped<ICorrectionLogService, CorrectionLogService>();
 
 builder.Services.AddScoped<IPumpRepository, PumpRepository>();
 builder.Services.AddScoped<IPumpService, PumpService>();
