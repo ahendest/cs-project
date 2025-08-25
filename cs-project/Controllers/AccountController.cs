@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using cs_project.Core.DTOs;
 
 namespace cs_project.Controllers
 {
@@ -58,6 +60,52 @@ namespace cs_project.Controllers
             return Ok(new { token = tokenString });
         }
 
+        [Authorize]
+        [HttpGet]
+        public async Task<ActionResult<UserProfileDTO>> GetCurrentUser()
+        {
+            var user = await userManager.GetUserAsync(User);
+            if (user == null) return NotFound();
+
+            return Ok(new UserProfileDTO
+            {
+                UserName = user.UserName ?? string.Empty,
+                Email = user.Email ?? string.Empty
+            });
+        }
+
+        [Authorize]
+        [HttpPut]
+        public async Task<ActionResult<UserProfileDTO>> UpdateProfile([FromBody] UserProfileUpdateDTO updateDto)
+        {
+            var user = await userManager.GetUserAsync(User);
+            if (user == null) return NotFound();
+
+            if (!string.IsNullOrWhiteSpace(updateDto.UserName)) user.UserName = updateDto.UserName;
+            if (!string.IsNullOrWhiteSpace(updateDto.Email)) user.Email = updateDto.Email;
+
+            var result = await userManager.UpdateAsync(user);
+            if (!result.Succeeded) return BadRequest(result.Errors);
+
+            return Ok(new UserProfileDTO
+            {
+                UserName = user.UserName ?? string.Empty,
+                Email = user.Email ?? string.Empty
+            });
+        }
+
+        [Authorize]
+        [HttpDelete]
+        public async Task<IActionResult> DeleteAccount()
+        {
+            var user = await userManager.GetUserAsync(User);
+            if (user == null) return NotFound();
+
+            var result = await userManager.DeleteAsync(user);
+            if (!result.Succeeded) return BadRequest(result.Errors);
+
+            return NoContent();
+        }
 
         public class RegisterDTO
         {
