@@ -160,6 +160,7 @@ builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 
 builder.Services.AddScoped<IPricePolicyRepository, PricePolicyRepository>();
+builder.Services.AddScoped<IPricePolicyService, PricePolicyService>();
 builder.Services.AddScoped<IPricingService, PricingService>();
 
 builder.Services.AddScoped<IShiftRepository, ShiftRepository>();
@@ -184,6 +185,7 @@ builder.Services.AddScoped<ISupplierPaymentApplyRepository, SupplierPaymentApply
 builder.Services.AddScoped<ISupplierPaymentApplyService, SupplierPaymentApplyService>();
 
 builder.Services.AddScoped<IStationFuelPriceRepository, StationFuelPriceRepository>();
+builder.Services.AddScoped<IStationFuelPriceService, StationFuelPriceService>();
 
 builder.Services.AddScoped<ISalesService, SalesService>();
 
@@ -194,6 +196,7 @@ builder.Services.AddScoped<ICustomerTransactionRepository, CustomerTransactionRe
 builder.Services.AddScoped<ICustomerTransactionService, CustomerTransactionService>();
 
 builder.Services.AddScoped<IExchangeRateRepository, ExchangeRateRepository>();
+builder.Services.AddScoped<IExchangeRateService, ExchangeRateService>();
 builder.Services.AddScoped<ISupplierCostRepository, SupplierCostRepository>();
 
 builder.Services.AddControllers();

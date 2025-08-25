@@ -1,8 +1,7 @@
-﻿using cs_project.Core.Entities.Pricing;
+using cs_project.Core.Entities.Pricing;
 using cs_project.Core.Interfaces;
 using cs_project.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 using static cs_project.Core.Entities.Enums;
 
 namespace cs_project.Infrastructure.Repositories
@@ -42,12 +41,23 @@ namespace cs_project.Infrastructure.Repositories
             return list;
         }
 
+        public async Task<IEnumerable<StationFuelPrice>> GetAllAsync(CancellationToken ct = default) =>
+            await db.StationFuelPrices.AsNoTracking().ToListAsync(ct);
+
+        public async Task<StationFuelPrice?> GetByIdAsync(int id, CancellationToken ct = default) =>
+            await db.StationFuelPrices.FirstOrDefaultAsync(x => x.Id == id, ct);
+
         public async Task AddAsync(StationFuelPrice price, CancellationToken ct = default)
         {
             await db.StationFuelPrices.AddAsync(price, ct);
-            await db.SaveChangesAsync(ct);
         }
 
-        
+        public void Update(StationFuelPrice price) => db.StationFuelPrices.Update(price);
+
+        public void Delete(StationFuelPrice price) => db.StationFuelPrices.Remove(price);
+
+        public async Task<bool> SaveChangesAsync(CancellationToken ct = default) =>
+            await db.SaveChangesAsync(ct) > 0;
     }
 }
+

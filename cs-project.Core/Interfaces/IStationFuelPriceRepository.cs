@@ -1,4 +1,4 @@
-﻿using cs_project.Core.Entities.Pricing;
+using cs_project.Core.Entities.Pricing;
 using static cs_project.Core.Entities.Enums;
 
 namespace cs_project.Core.Interfaces
@@ -18,7 +18,12 @@ namespace cs_project.Core.Interfaces
             DateTime asOfUtc,
             CancellationToken ct = default);
 
-        // Create/publish a price
+        Task<IEnumerable<StationFuelPrice>> GetAllAsync(CancellationToken ct = default);
+        Task<StationFuelPrice?> GetByIdAsync(int id, CancellationToken ct = default);
         Task AddAsync(StationFuelPrice price, CancellationToken ct = default);
+        void Update(StationFuelPrice price);
+        void Delete(StationFuelPrice price);
+        Task<bool> SaveChangesAsync(CancellationToken ct = default);
     }
 }
+
