@@ -16,10 +16,10 @@ public class StationControllerTests
     {
         var service = new Mock<IStationService>();
         var logger = new Mock<ILogger<StationController>>();
-        service.Setup(s => s.GetStationByIdAsync(1)).ReturnsAsync(new StationDTO { Id = 1 });
+        service.Setup(s => s.GetStationByIdAsync(1, It.IsAny<CancellationToken>())).ReturnsAsync(new StationDTO { Id = 1 });
         var controller = new StationController(service.Object, logger.Object);
 
-        var result = await controller.GetStation(1);
+        var result = await controller.GetStation(1, CancellationToken.None);
 
         var ok = Assert.IsType<OkObjectResult>(result.Result);
         Assert.IsType<StationDTO>(ok.Value);
@@ -30,10 +30,10 @@ public class StationControllerTests
     {
         var service = new Mock<IStationService>();
         var logger = new Mock<ILogger<StationController>>();
-        service.Setup(s => s.GetStationByIdAsync(1)).ReturnsAsync((StationDTO?)null);
+        service.Setup(s => s.GetStationByIdAsync(1, It.IsAny<CancellationToken>())).ReturnsAsync((StationDTO?)null);
         var controller = new StationController(service.Object, logger.Object);
 
-        var result = await controller.GetStation(1);
+        var result = await controller.GetStation(1, CancellationToken.None);
 
         Assert.IsType<NotFoundResult>(result.Result);
     }
@@ -43,10 +43,10 @@ public class StationControllerTests
     {
         var service = new Mock<IStationService>();
         var logger = new Mock<ILogger<StationController>>();
-        service.Setup(s => s.CreateStationAsync(It.IsAny<StationCreateDTO>())).ReturnsAsync(new StationDTO { Id = 1 });
+        service.Setup(s => s.CreateStationAsync(It.IsAny<StationCreateDTO>(), It.IsAny<CancellationToken>())).ReturnsAsync(new StationDTO { Id = 1 });
         var controller = new StationController(service.Object, logger.Object);
 
-        var result = await controller.CreateStation(new StationCreateDTO { Name = "S", Address = "A" });
+        var result = await controller.CreateStation(new StationCreateDTO { Name = "S", Address = "A" }, CancellationToken.None);
 
         var created = Assert.IsType<CreatedAtActionResult>(result.Result);
         Assert.IsType<StationDTO>(created.Value);
@@ -57,10 +57,10 @@ public class StationControllerTests
     {
         var service = new Mock<IStationService>();
         var logger = new Mock<ILogger<StationController>>();
-        service.Setup(s => s.UpdateStationAsync(1, It.IsAny<StationCreateDTO>())).ReturnsAsync(true);
+        service.Setup(s => s.UpdateStationAsync(1, It.IsAny<StationCreateDTO>(), It.IsAny<CancellationToken>())).ReturnsAsync(true);
         var controller = new StationController(service.Object, logger.Object);
 
-        var result = await controller.UpdateStation(1, new StationCreateDTO { Name = "S", Address = "A" });
+        var result = await controller.UpdateStation(1, new StationCreateDTO { Name = "S", Address = "A" }, CancellationToken.None);
 
         Assert.IsType<NoContentResult>(result);
     }
@@ -70,10 +70,10 @@ public class StationControllerTests
     {
         var service = new Mock<IStationService>();
         var logger = new Mock<ILogger<StationController>>();
-        service.Setup(s => s.UpdateStationAsync(1, It.IsAny<StationCreateDTO>())).ReturnsAsync(false);
+        service.Setup(s => s.UpdateStationAsync(1, It.IsAny<StationCreateDTO>(), It.IsAny<CancellationToken>())).ReturnsAsync(false);
         var controller = new StationController(service.Object, logger.Object);
 
-        var result = await controller.UpdateStation(1, new StationCreateDTO { Name = "S", Address = "A" });
+        var result = await controller.UpdateStation(1, new StationCreateDTO { Name = "S", Address = "A" }, CancellationToken.None);
 
         Assert.IsType<NotFoundResult>(result);
     }
@@ -83,10 +83,10 @@ public class StationControllerTests
     {
         var service = new Mock<IStationService>();
         var logger = new Mock<ILogger<StationController>>();
-        service.Setup(s => s.DeleteStationAsync(1)).ReturnsAsync(true);
+        service.Setup(s => s.DeleteStationAsync(1, It.IsAny<CancellationToken>())).ReturnsAsync(true);
         var controller = new StationController(service.Object, logger.Object);
 
-        var result = await controller.DeleteStation(1);
+        var result = await controller.DeleteStation(1, CancellationToken.None);
 
         Assert.IsType<NoContentResult>(result);
     }
@@ -96,10 +96,10 @@ public class StationControllerTests
     {
         var service = new Mock<IStationService>();
         var logger = new Mock<ILogger<StationController>>();
-        service.Setup(s => s.DeleteStationAsync(1)).ReturnsAsync(false);
+        service.Setup(s => s.DeleteStationAsync(1, It.IsAny<CancellationToken>())).ReturnsAsync(false);
         var controller = new StationController(service.Object, logger.Object);
 
-        var result = await controller.DeleteStation(1);
+        var result = await controller.DeleteStation(1, CancellationToken.None);
 
         Assert.IsType<NotFoundResult>(result);
     }

@@ -24,7 +24,7 @@ public class StationServiceTests
         repo.Setup(r => r.GetByIdAsync(1)).ReturnsAsync(new Station { Id = 1, Name="S", Address="A" });
         var service = new StationService(repo.Object, _mapper);
 
-        var result = await service.GetStationByIdAsync(1);
+        var result = await service.GetStationByIdAsync(1, CancellationToken.None);
 
         Assert.NotNull(result);
         Assert.Equal(1, result!.Id);
@@ -37,7 +37,7 @@ public class StationServiceTests
         repo.Setup(r => r.GetByIdAsync(1)).ReturnsAsync((Station?)null);
         var service = new StationService(repo.Object, _mapper);
 
-        var result = await service.GetStationByIdAsync(1);
+        var result = await service.GetStationByIdAsync(1, CancellationToken.None);
 
         Assert.Null(result);
     }
@@ -51,7 +51,7 @@ public class StationServiceTests
         repo.Setup(r => r.SaveChangesAsync()).ReturnsAsync(true).Verifiable();
         var service = new StationService(repo.Object, _mapper);
 
-        var result = await service.DeleteStationAsync(1);
+        var result = await service.DeleteStationAsync(1, CancellationToken.None);
 
         Assert.True(result);
         repo.Verify(r => r.Delete(entity), Times.Once);
