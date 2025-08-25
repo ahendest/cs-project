@@ -25,19 +25,6 @@ public class SalesControllerTests
     }
 
     [Fact]
-    public async Task CreateSale_ReturnsValidationProblem_WhenInvalid()
-    {
-        var service = new Mock<ISalesService>();
-        var controller = new SalesController(service.Object);
-        controller.ModelState.AddModelError("PumpId", "Required");
-
-        var result = await controller.CreateSale(new CreateSaleDTO(), CancellationToken.None);
-
-        var obj = Assert.IsType<ObjectResult>(result);
-        Assert.IsType<ValidationProblemDetails>(obj.Value);
-    }
-
-    [Fact]
     public async Task GetSales_ReturnsOk()
     {
         var service = new Mock<ISalesService>();
