@@ -3,6 +3,7 @@ using cs_project.Core.DTOs;
 using cs_project.Core.Entities;
 using cs_project.Core.Models;
 using cs_project.Infrastructure.Repositories;
+using System.Threading;
 
 namespace cs_project.Infrastructure.Services
 {
@@ -17,9 +18,9 @@ namespace cs_project.Infrastructure.Services
             _mapper = mapper;
         }
 
-        public async Task<PagedResult<EmployeeDTO>> GetEmployeeAsync(PagingQueryParameters query)
+        public async Task<PagedResult<EmployeeDTO>> GetEmployeeAsync(PagingQueryParameters query, CancellationToken ct)
         {
-            var (entities, total) = await _employeeRepository.QueryEmployeesAsync(query);
+            var (entities, total) = await _employeeRepository.QueryEmployeesAsync(query, ct);
             var dtoList = _mapper.Map<IEnumerable<EmployeeDTO>>(entities);
 
             return new PagedResult<EmployeeDTO>
@@ -31,43 +32,43 @@ namespace cs_project.Infrastructure.Services
             };
         }
 
-        public async Task<IEnumerable<EmployeeDTO>> GetAllEmployeesAsync()
+        public async Task<IEnumerable<EmployeeDTO>> GetAllEmployeesAsync(CancellationToken ct)
         {
-            var employees = await _employeeRepository.GetAllAsync();
+            var employees = await _employeeRepository.GetAllAsync(ct);
             return _mapper.Map<IEnumerable<EmployeeDTO>>(employees);
         }
 
-        public async Task<EmployeeDTO?> GetEmployeeByIdAsync(int id)
+        public async Task<EmployeeDTO?> GetEmployeeByIdAsync(int id, CancellationToken ct)
         {
-            var employee = await _employeeRepository.GetByIdAsync(id);
+            var employee = await _employeeRepository.GetByIdAsync(id, ct);
             return employee == null ? null : _mapper.Map<EmployeeDTO>(employee);
         }
 
-        public async Task<EmployeeDTO> CreateEmployeeAsync(EmployeeCreateDTO dto)
+        public async Task<EmployeeDTO> CreateEmployeeAsync(EmployeeCreateDTO dto, CancellationToken ct)
         {
             var employee = _mapper.Map<Employee>(dto);
-            await _employeeRepository.AddAsync(employee);
-            await _employeeRepository.SaveChangesAsync();
+            await _employeeRepository.AddAsync(employee, ct);
+            await _employeeRepository.SaveChangesAsync(ct);
             return _mapper.Map<EmployeeDTO>(employee);
         }
 
-        public async Task<bool> UpdateEmployeeAsync(int id, EmployeeCreateDTO dto)
+        public async Task<bool> UpdateEmployeeAsync(int id, EmployeeCreateDTO dto, CancellationToken ct)
         {
-            var employee = await _employeeRepository.GetByIdAsync(id);
+            var employee = await _employeeRepository.GetByIdAsync(id, ct);
             if (employee == null) return false;
 
             _mapper.Map(dto, employee);
             _employeeRepository.Update(employee);
-            return await _employeeRepository.SaveChangesAsync();
+            return await _employeeRepository.SaveChangesAsync(ct);
         }
 
-        public async Task<bool> DeleteEmployeeAsync(int id)
+        public async Task<bool> DeleteEmployeeAsync(int id, CancellationToken ct)
         {
-            var employee = await _employeeRepository.GetByIdAsync(id);
+            var employee = await _employeeRepository.GetByIdAsync(id, ct);
             if (employee == null) return false;
 
             _employeeRepository.Delete(employee);
-            return await _employeeRepository.SaveChangesAsync();
+            return await _employeeRepository.SaveChangesAsync(ct);
         }
     }
 }

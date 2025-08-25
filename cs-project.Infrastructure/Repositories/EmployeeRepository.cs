@@ -2,6 +2,7 @@ using cs_project.Core.Entities;
 using cs_project.Core.Models;
 using cs_project.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using System.Threading;
 
 namespace cs_project.Infrastructure.Repositories
 {
@@ -14,7 +15,7 @@ namespace cs_project.Infrastructure.Repositories
             _db = db;
         }
 
-        public async Task<(IEnumerable<Employee> Items, int TotalCount)> QueryEmployeesAsync(PagingQueryParameters query)
+        public async Task<(IEnumerable<Employee> Items, int TotalCount)> QueryEmployeesAsync(PagingQueryParameters query, CancellationToken ct)
         {
             var employees = _db.Employees
                 .Include(e => e.Station)
@@ -43,24 +44,24 @@ namespace cs_project.Infrastructure.Repositories
                 _ => employees.OrderBy(e => e.LastName)
             };
 
-            int totalCount = await employees.CountAsync();
+            int totalCount = await employees.CountAsync(ct);
 
             int page = query.Page > 0 ? query.Page : 1;
             int pageSize = query.PageSize > 0 && query.PageSize <= 100 ? query.PageSize : 20;
             employees = employees.Skip((page - 1) * pageSize).Take(pageSize);
 
-            var items = await employees.ToListAsync();
+            var items = await employees.ToListAsync(ct);
             return (items, totalCount);
         }
 
-        public async Task<IEnumerable<Employee>> GetAllAsync() =>
-            await _db.Employees.AsNoTracking().ToListAsync();
+        public async Task<IEnumerable<Employee>> GetAllAsync(CancellationToken ct) =>
+            await _db.Employees.AsNoTracking().ToListAsync(ct);
 
-        public async Task<Employee?> GetByIdAsync(int id) =>
-            await _db.Employees.FindAsync(id);
+        public async Task<Employee?> GetByIdAsync(int id, CancellationToken ct) =>
+            await _db.Employees.FindAsync(new object[] { id }, ct);
 
-        public async Task AddAsync(Employee employee) =>
-            await _db.Employees.AddAsync(employee);
+        public async Task AddAsync(Employee employee, CancellationToken ct) =>
+            await _db.Employees.AddAsync(employee, ct);
 
         public void Update(Employee employee) =>
             _db.Employees.Update(employee);
@@ -68,7 +69,7 @@ namespace cs_project.Infrastructure.Repositories
         public void Delete(Employee employee) =>
             _db.Employees.Remove(employee);
 
-        public async Task<bool> SaveChangesAsync() =>
-            await _db.SaveChangesAsync() > 0;
+        public async Task<bool> SaveChangesAsync(CancellationToken ct) =>
+            await _db.SaveChangesAsync(ct) > 0;
     }
 }
