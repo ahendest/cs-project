@@ -1,29 +1,37 @@
 ﻿using cs_project.Core.Entities;
 using cs_project.Core.Interfaces;
-using cs_project.Infrastructure.Data;
-using Microsoft.EntityFrameworkCore;
+using cs_project.Infrastructure.Repositories;
 
 namespace cs_project.Infrastructure.Services
 {
     public class SalesService : ISalesService
     {
-        private readonly AppDbContext _db;
+        private readonly ICustomerTransactionRepository _transactionRepo;
+        private readonly IPumpRepository _pumpRepo;
+        private readonly ITankRepository _tankRepo;
         private readonly IStationFuelPriceRepository _priceRepo;
 
-        public SalesService(AppDbContext db, IStationFuelPriceRepository priceRepo)
+        public SalesService(ICustomerTransactionRepository transactionRepo,
+                            IPumpRepository pumpRepo,
+                            ITankRepository tankRepo,
+                            IStationFuelPriceRepository priceRepo)
         {
-            _db = db;
+            _transactionRepo = transactionRepo;
+            _pumpRepo = pumpRepo;
+            _tankRepo = tankRepo;
             _priceRepo = priceRepo;
         }
 
         private async Task<(decimal unit, decimal total, DateTime now, int priceId)> GetPumpInfoAndTotalsAsync(int pumpId, decimal liters, CancellationToken ct)
         {
-            var pump = await _db.Pumps.Include(p => p.Tank).ThenInclude(t => t.Station)
-                                      .FirstOrDefaultAsync(p => p.Id == pumpId, ct)
+            var pump = await _pumpRepo.GetByIdAsync(pumpId)
                         ?? throw new InvalidOperationException("Pump not found");
 
-            var stationId = pump.Tank.StationId;
-            var fuelType = pump.Tank.FuelType;
+            var tank = await _tankRepo.GetByIdAsync(pump.TankId)
+                        ?? throw new InvalidOperationException("Tank not found");
+
+            var stationId = tank.StationId;
+            var fuelType = tank.FuelType;
             var now = DateTime.UtcNow;
 
             var price = await _priceRepo.GetCurrentAsync(stationId, fuelType, now, ct)
@@ -51,22 +59,22 @@ namespace cs_project.Infrastructure.Services
                 StationFuelPriceId = priceId
             };
 
-            _db.CustomerTransactions.Add(trx);
-            await _db.SaveChangesAsync(ct);
+            await _transactionRepo.AddAsync(trx);
+            await _transactionRepo.SaveChangesAsync();
             return trx;
         }
 
         public async Task<IEnumerable<CustomerTransaction>> GetSalesAsync(CancellationToken ct)
-            => await _db.CustomerTransactions.AsNoTracking().ToListAsync(ct);
+            => await _transactionRepo.GetAllAsync();
 
         public async Task<CustomerTransaction?> GetSaleByIdAsync(int id, CancellationToken ct)
-            => await _db.CustomerTransactions.AsNoTracking().FirstOrDefaultAsync(t => t.Id == id, ct);
+            => await _transactionRepo.GetByIdAsync(id);
 
         public async Task<bool> UpdateSaleAsync(int id, int pumpId, decimal liters, CancellationToken ct)
         {
             if (liters <= 0) throw new ArgumentOutOfRangeException(nameof(liters));
 
-            var trx = await _db.CustomerTransactions.FirstOrDefaultAsync(t => t.Id == id, ct);
+            var trx = await _transactionRepo.GetByIdAsync(id);
             if (trx == null) return false;
 
             var (unit, total, now, priceId) = await GetPumpInfoAndTotalsAsync(pumpId, liters, ct);
@@ -78,18 +86,17 @@ namespace cs_project.Infrastructure.Services
             trx.TimestampUtc = now;
             trx.StationFuelPriceId = priceId;
 
-            await _db.SaveChangesAsync(ct);
-            return true;
+            _transactionRepo.Update(trx);
+            return await _transactionRepo.SaveChangesAsync();
         }
 
         public async Task<bool> DeleteSaleAsync(int id, CancellationToken ct)
         {
-            var trx = await _db.CustomerTransactions.FirstOrDefaultAsync(t => t.Id == id, ct);
+            var trx = await _transactionRepo.GetByIdAsync(id);
             if (trx == null) return false;
 
-            _db.CustomerTransactions.Remove(trx);
-            await _db.SaveChangesAsync(ct);
-            return true;
+            _transactionRepo.Delete(trx);
+            return await _transactionRepo.SaveChangesAsync();
         }
     }
 }
