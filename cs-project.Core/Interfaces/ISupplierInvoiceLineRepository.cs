@@ -8,6 +8,7 @@ namespace cs_project.Infrastructure.Repositories
         Task<(IEnumerable<SupplierInvoiceLine> Items, int TotalCount)> QuerySupplierInvoiceLinesAsync(PagingQueryParameters query);
         Task<IEnumerable<SupplierInvoiceLine>> GetAllAsync();
         Task<SupplierInvoiceLine?> GetByIdAsync(int id);
+        Task<IEnumerable<SupplierInvoiceLine>> GetByInvoiceIdAsync(int invoiceId);
         Task AddAsync(SupplierInvoiceLine line);
         void Update(SupplierInvoiceLine line);
         void Delete(SupplierInvoiceLine line);
