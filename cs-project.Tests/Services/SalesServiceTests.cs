@@ -2,6 +2,7 @@ using cs_project.Core.Entities;
 using cs_project.Core.Entities.Pricing;
 using cs_project.Core.Interfaces;
 using cs_project.Infrastructure.Data;
+using cs_project.Infrastructure.Repositories;
 using cs_project.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Moq;
@@ -25,7 +26,10 @@ public class SalesServiceTests
         priceRepo.Setup(r => r.GetCurrentAsync(1, FuelType.Diesel, It.IsAny<DateTime>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(new StationFuelPrice { Id = 1, PriceRon = 5m });
 
-        var service = new SalesService(db, priceRepo.Object);
+        var pumpRepo = new PumpRepository(db);
+        var tankRepo = new TankRepository(db);
+        var trxRepo = new CustomerTransactionRepository(db);
+        var service = new SalesService(trxRepo, pumpRepo, tankRepo, priceRepo.Object);
         var trx = await service.CreateSaleAsync(1, 10m, CancellationToken.None);
 
         Assert.Equal(10m, trx.Liters);
@@ -38,7 +42,10 @@ public class SalesServiceTests
         var options = new DbContextOptionsBuilder<AppDbContext>().UseInMemoryDatabase("sales_fail").Options;
         using var db = new AppDbContext(options);
         var priceRepo = new Mock<IStationFuelPriceRepository>();
-        var service = new SalesService(db, priceRepo.Object);
+        var pumpRepo = new PumpRepository(db);
+        var tankRepo = new TankRepository(db);
+        var trxRepo = new CustomerTransactionRepository(db);
+        var service = new SalesService(trxRepo, pumpRepo, tankRepo, priceRepo.Object);
 
         await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => service.CreateSaleAsync(1, 0m, CancellationToken.None));
     }
@@ -57,7 +64,10 @@ public class SalesServiceTests
         priceRepo.Setup(r => r.GetCurrentAsync(1, FuelType.Diesel, It.IsAny<DateTime>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(new StationFuelPrice { Id = 1, PriceRon = 5m });
 
-        var service = new SalesService(db, priceRepo.Object);
+        var pumpRepo = new PumpRepository(db);
+        var tankRepo = new TankRepository(db);
+        var trxRepo = new CustomerTransactionRepository(db);
+        var service = new SalesService(trxRepo, pumpRepo, tankRepo, priceRepo.Object);
         var created = await service.CreateSaleAsync(1, 10m, CancellationToken.None);
 
         var list = await service.GetSalesAsync(CancellationToken.None);
