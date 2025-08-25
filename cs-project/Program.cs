@@ -177,6 +177,12 @@ builder.Services.AddScoped<ISupplierInvoiceService, SupplierInvoiceService>();
 builder.Services.AddScoped<ISupplierInvoiceLineRepository, SupplierInvoiceLineRepository>();
 builder.Services.AddScoped<ISupplierInvoiceLineService, SupplierInvoiceLineService>();
 
+builder.Services.AddScoped<ISupplierPaymentRepository, SupplierPaymentRepository>();
+builder.Services.AddScoped<ISupplierPaymentService, SupplierPaymentService>();
+
+builder.Services.AddScoped<ISupplierPaymentApplyRepository, SupplierPaymentApplyRepository>();
+builder.Services.AddScoped<ISupplierPaymentApplyService, SupplierPaymentApplyService>();
+
 builder.Services.AddScoped<IStationFuelPriceRepository, StationFuelPriceRepository>();
 
 builder.Services.AddScoped<ISalesService, SalesService>();
