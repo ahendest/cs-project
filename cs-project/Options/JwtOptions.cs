@@ -1,10 +1,16 @@
-﻿namespace cs_project.Options
-{
-    public class JwtOptions
-    {
-        public required string Key { get; set; }
-        public required string Issuer { get; set; }
-        public required string Audience { get; set; }
+using System.ComponentModel.DataAnnotations;
 
-    }
+namespace cs_project.Options;
+
+public class JwtOptions
+{
+    [Required]
+    public required string Key { get; set; }
+
+    [Required]
+    public required string Issuer { get; set; }
+
+    [Required]
+    public required string Audience { get; set; }
 }
+
