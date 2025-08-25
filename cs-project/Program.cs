@@ -171,6 +171,12 @@ builder.Services.AddScoped<IShiftEmployeeService, ShiftEmployeeService>();
 builder.Services.AddScoped<ISupplierRepository, SupplierRepository>();
 builder.Services.AddScoped<ISupplierService, SupplierService>();
 
+builder.Services.AddScoped<ISupplierInvoiceRepository, SupplierInvoiceRepository>();
+builder.Services.AddScoped<ISupplierInvoiceService, SupplierInvoiceService>();
+
+builder.Services.AddScoped<ISupplierInvoiceLineRepository, SupplierInvoiceLineRepository>();
+builder.Services.AddScoped<ISupplierInvoiceLineService, SupplierInvoiceLineService>();
+
 builder.Services.AddScoped<IStationFuelPriceRepository, StationFuelPriceRepository>();
 
 builder.Services.AddScoped<ISalesService, SalesService>();
