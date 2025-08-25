@@ -23,12 +23,12 @@ namespace cs_project.Infrastructure.Repositories
 
             if (!string.IsNullOrWhiteSpace(query.SearchTerm))
             {
-                var term = query.SearchTerm.ToLower();
+                var term = $"%{query.SearchTerm}%";
                 stations = stations.Where(s =>
-                    s.Name.ToLower().Contains(term) ||
-                    s.Address.ToLower().Contains(term) ||
-                    (s.City != null && s.City.ToLower().Contains(term)) ||
-                    (s.Country != null && s.Country.ToLower().Contains(term)));
+                    EF.Functions.Like(s.Name, term) ||
+                    EF.Functions.Like(s.Address, term) ||
+                    (s.City != null && EF.Functions.Like(s.City, term)) ||
+                    (s.Country != null && EF.Functions.Like(s.Country, term)));
             }
 
             stations = query.SortBy?.ToLower() switch

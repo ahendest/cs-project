@@ -22,10 +22,10 @@ namespace cs_project.Infrastructure.Repositories
 
             if (!string.IsNullOrWhiteSpace(query.SearchTerm))
             {
-                string term = query.SearchTerm.ToLower();
+                string term = $"%{query.SearchTerm}%";
                 shifts = shifts.Where(s =>
-                    s.Station.Name.ToLower().Contains(term) ||
-                    s.StationId.ToString().Contains(term));
+                    EF.Functions.Like(s.Station.Name, term) ||
+                    EF.Functions.Like(s.StationId.ToString(), term));
             }
 
             shifts = query.SortBy?.ToLower() switch

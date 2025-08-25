@@ -19,10 +19,10 @@ namespace cs_project.Infrastructure.Repositories
 
             if (!string.IsNullOrWhiteSpace(query.SearchTerm))
             {
-                string term = query.SearchTerm.ToLower();
+                string term = $"%{query.SearchTerm}%";
                 tanks = tanks.Where(t =>
-                    t.FuelType.ToString().ToLower().Contains(term) ||
-                    t.Station.Name.ToLower().Contains(term));
+                    EF.Functions.Like(t.FuelType.ToString(), term) ||
+                    EF.Functions.Like(t.Station.Name, term));
             }
 
             tanks = query.SortBy?.ToLower() switch
