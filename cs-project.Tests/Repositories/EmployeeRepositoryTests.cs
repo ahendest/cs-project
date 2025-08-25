@@ -3,6 +3,7 @@ using cs_project.Infrastructure.Data;
 using cs_project.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using static cs_project.Core.Entities.Enums;
+using System.Threading;
 
 namespace cs_project.Tests.Repositories;
 
@@ -41,10 +42,10 @@ public class EmployeeRepositoryTests
             StationId = station.Id
         };
 
-        await repo.AddAsync(employee);
-        await repo.SaveChangesAsync();
+        await repo.AddAsync(employee, CancellationToken.None);
+        await repo.SaveChangesAsync(CancellationToken.None);
 
-        var fetched = await repo.GetByIdAsync(1);
+        var fetched = await repo.GetByIdAsync(1, CancellationToken.None);
         Assert.NotNull(fetched);
         Assert.Equal("John", fetched!.FirstName);
     }
@@ -64,14 +65,14 @@ public class EmployeeRepositoryTests
             HireDateUtc = DateTime.UtcNow,
             StationId = station.Id
         };
-        await repo.AddAsync(employee);
-        await repo.SaveChangesAsync();
+        await repo.AddAsync(employee, CancellationToken.None);
+        await repo.SaveChangesAsync(CancellationToken.None);
 
         employee.LastName = "Smith";
         repo.Update(employee);
-        await repo.SaveChangesAsync();
+        await repo.SaveChangesAsync(CancellationToken.None);
 
-        var fetched = await repo.GetByIdAsync(1);
+        var fetched = await repo.GetByIdAsync(1, CancellationToken.None);
         Assert.Equal("Smith", fetched!.LastName);
     }
 
@@ -90,13 +91,13 @@ public class EmployeeRepositoryTests
             HireDateUtc = DateTime.UtcNow,
             StationId = station.Id
         };
-        await repo.AddAsync(employee);
-        await repo.SaveChangesAsync();
+        await repo.AddAsync(employee, CancellationToken.None);
+        await repo.SaveChangesAsync(CancellationToken.None);
 
         repo.Delete(employee);
-        await repo.SaveChangesAsync();
+        await repo.SaveChangesAsync(CancellationToken.None);
 
-        var fetched = await repo.GetByIdAsync(1);
+        var fetched = await repo.GetByIdAsync(1, CancellationToken.None);
         Assert.Null(fetched);
     }
 
@@ -105,7 +106,7 @@ public class EmployeeRepositoryTests
     {
         using var ctx = CreateContext();
         var repo = new EmployeeRepository(ctx);
-        var fetched = await repo.GetByIdAsync(999);
+        var fetched = await repo.GetByIdAsync(999, CancellationToken.None);
         Assert.Null(fetched);
     }
 
@@ -122,8 +123,8 @@ public class EmployeeRepositoryTests
             Role = EmployeeRole.Cashier,
             HireDateUtc = DateTime.UtcNow
         };
-        await repo.AddAsync(employee);
-        await Assert.ThrowsAsync<DbUpdateException>(repo.SaveChangesAsync);
+        await repo.AddAsync(employee, CancellationToken.None);
+        await Assert.ThrowsAsync<DbUpdateException>(() => repo.SaveChangesAsync(CancellationToken.None));
     }
 }
 

@@ -4,6 +4,7 @@ using cs_project.Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
+using System.Threading;
 
 namespace cs_project.Tests.Controllers;
 
@@ -14,10 +15,10 @@ public class EmployeesControllerTests
     {
         var service = new Mock<IEmployeeService>();
         var logger = new Mock<ILogger<EmployeeController>>();
-        service.Setup(s => s.GetEmployeeByIdAsync(1)).ReturnsAsync((EmployeeDTO?)null);
+        service.Setup(s => s.GetEmployeeByIdAsync(1, It.IsAny<CancellationToken>())).ReturnsAsync((EmployeeDTO?)null);
         var controller = new EmployeeController(service.Object, logger.Object);
 
-        var result = await controller.GetEmployee(1);
+        var result = await controller.GetEmployee(1, CancellationToken.None);
 
         Assert.IsType<NotFoundResult>(result.Result);
     }
@@ -27,10 +28,10 @@ public class EmployeesControllerTests
     {
         var service = new Mock<IEmployeeService>();
         var logger = new Mock<ILogger<EmployeeController>>();
-        service.Setup(s => s.DeleteEmployeeAsync(1)).ReturnsAsync(true);
+        service.Setup(s => s.DeleteEmployeeAsync(1, It.IsAny<CancellationToken>())).ReturnsAsync(true);
         var controller = new EmployeeController(service.Object, logger.Object);
 
-        var result = await controller.DeleteEmployee(1);
+        var result = await controller.DeleteEmployee(1, CancellationToken.None);
 
         Assert.IsType<NoContentResult>(result);
     }
