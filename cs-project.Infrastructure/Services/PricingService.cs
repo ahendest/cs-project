@@ -31,6 +31,8 @@ namespace cs_project.Infrastructure.Services
                 await priceRepo.AddAsync(price, ct);
                 results.Add(price);
             }
+
+            await priceRepo.SaveChangesAsync(ct);
             return results;
         }
 
