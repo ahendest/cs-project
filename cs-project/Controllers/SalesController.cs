@@ -27,7 +27,6 @@ namespace cs_project.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateSale([FromBody] CreateSaleDTO dto, CancellationToken ct)
         {
-            if (!ModelState.IsValid) return ValidationProblem(ModelState);
             var trx = await sales.CreateSaleAsync(dto.PumpId, dto.Liters, ct);
             return Ok(trx);
         }
@@ -35,7 +34,6 @@ namespace cs_project.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateSale(int id, [FromBody] CreateSaleDTO dto, CancellationToken ct)
         {
-            if (!ModelState.IsValid) return ValidationProblem(ModelState);
             var updated = await sales.UpdateSaleAsync(id, dto.PumpId, dto.Liters, ct);
             return updated ? NoContent() : NotFound();
         }
