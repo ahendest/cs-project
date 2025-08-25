@@ -1,8 +1,10 @@
 using cs_project.Controllers;
+using cs_project.Core.DTOs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 using Moq;
@@ -39,9 +41,9 @@ public class AccountControllerTests
         var um = MockUserManager();
         var sm = MockSignInManager(um.Object);
         um.Setup(u => u.CreateAsync(It.IsAny<IdentityUser>(), It.IsAny<string>())).ReturnsAsync(IdentityResult.Success);
-        var controller = new AccountController(um.Object, sm.Object, BuildConfig());
+        var controller = new AccountController(um.Object, sm.Object, BuildConfig(), Mock.Of<ILogger<AccountController>>());
 
-        var result = await controller.Register(new AccountController.RegisterDTO { UserName = "u", Email = "e", Password = "p" });
+        var result = await controller.Register(new RegisterDTO { UserName = "u", Email = "e", Password = "p" });
 
         Assert.IsType<OkObjectResult>(result);
     }
@@ -52,9 +54,9 @@ public class AccountControllerTests
         var um = MockUserManager();
         var sm = MockSignInManager(um.Object);
         um.Setup(u => u.CreateAsync(It.IsAny<IdentityUser>(), It.IsAny<string>())).ReturnsAsync(IdentityResult.Failed());
-        var controller = new AccountController(um.Object, sm.Object, BuildConfig());
+        var controller = new AccountController(um.Object, sm.Object, BuildConfig(), Mock.Of<ILogger<AccountController>>());
 
-        var result = await controller.Register(new AccountController.RegisterDTO { UserName = "u", Email = "e", Password = "p" });
+        var result = await controller.Register(new RegisterDTO { UserName = "u", Email = "e", Password = "p" });
 
         Assert.IsType<BadRequestObjectResult>(result);
     }
@@ -67,9 +69,9 @@ public class AccountControllerTests
         um.Setup(u => u.FindByNameAsync("u")).ReturnsAsync(user);
         var sm = MockSignInManager(um.Object);
         sm.Setup(s => s.PasswordSignInAsync(user, "p", false, true)).ReturnsAsync(SignInResult.Success);
-        var controller = new AccountController(um.Object, sm.Object, BuildConfig());
+        var controller = new AccountController(um.Object, sm.Object, BuildConfig(), Mock.Of<ILogger<AccountController>>());
 
-        var result = await controller.Login(new AccountController.LoginDTO { UserName = "u", Password = "p" });
+        var result = await controller.Login(new LoginDTO { UserName = "u", Password = "p" });
 
         var ok = Assert.IsType<OkObjectResult>(result);
         var token = ok.Value?.GetType().GetProperty("token")?.GetValue(ok.Value);
@@ -84,9 +86,9 @@ public class AccountControllerTests
         um.Setup(u => u.FindByNameAsync("u")).ReturnsAsync(user);
         var sm = MockSignInManager(um.Object);
         sm.Setup(s => s.PasswordSignInAsync(user, "p", false, true)).ReturnsAsync(SignInResult.Failed);
-        var controller = new AccountController(um.Object, sm.Object, BuildConfig());
+        var controller = new AccountController(um.Object, sm.Object, BuildConfig(), Mock.Of<ILogger<AccountController>>());
 
-        var result = await controller.Login(new AccountController.LoginDTO { UserName = "u", Password = "p" });
+        var result = await controller.Login(new LoginDTO { UserName = "u", Password = "p" });
 
         Assert.IsType<UnauthorizedObjectResult>(result);
     }
