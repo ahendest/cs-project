@@ -16,10 +16,8 @@ namespace cs_project.Infrastructure.Services
             _priceRepo = priceRepo;
         }
 
-        public async Task<CustomerTransaction> CreateSaleAsync(int pumpId, decimal liters, CancellationToken ct)
+        private async Task<(decimal unit, decimal total, DateTime now, int priceId)> GetPumpInfoAndTotalsAsync(int pumpId, decimal liters, CancellationToken ct)
         {
-            if (liters <= 0) throw new ArgumentOutOfRangeException(nameof(liters));
-
             var pump = await _db.Pumps.Include(p => p.Tank).ThenInclude(t => t.Station)
                                       .FirstOrDefaultAsync(p => p.Id == pumpId, ct)
                         ?? throw new InvalidOperationException("Pump not found");
@@ -34,6 +32,15 @@ namespace cs_project.Infrastructure.Services
             var unit = price.PriceRon;
             var total = Math.Round(unit * liters, 2, MidpointRounding.AwayFromZero);
 
+            return (unit, total, now, price.Id);
+        }
+
+        public async Task<CustomerTransaction> CreateSaleAsync(int pumpId, decimal liters, CancellationToken ct)
+        {
+            if (liters <= 0) throw new ArgumentOutOfRangeException(nameof(liters));
+
+            var (unit, total, now, priceId) = await GetPumpInfoAndTotalsAsync(pumpId, liters, ct);
+
             var trx = new CustomerTransaction
             {
                 PumpId = pumpId,
@@ -41,7 +48,7 @@ namespace cs_project.Infrastructure.Services
                 PricePerLiter = unit,
                 TotalPrice = total,
                 TimestampUtc = now,
-                StationFuelPriceId = price.Id
+                StationFuelPriceId = priceId
             };
 
             _db.CustomerTransactions.Add(trx);
@@ -62,26 +69,14 @@ namespace cs_project.Infrastructure.Services
             var trx = await _db.CustomerTransactions.FirstOrDefaultAsync(t => t.Id == id, ct);
             if (trx == null) return false;
 
-            var pump = await _db.Pumps.Include(p => p.Tank).ThenInclude(t => t.Station)
-                                      .FirstOrDefaultAsync(p => p.Id == pumpId, ct)
-                        ?? throw new InvalidOperationException("Pump not found");
-
-            var stationId = pump.Tank.StationId;
-            var fuelType = pump.Tank.FuelType;
-            var now = DateTime.UtcNow;
-
-            var price = await _priceRepo.GetCurrentAsync(stationId, fuelType, now, ct)
-                        ?? throw new InvalidOperationException("No published price for station/fuel");
-
-            var unit = price.PriceRon;
-            var total = Math.Round(unit * liters, 2, MidpointRounding.AwayFromZero);
+            var (unit, total, now, priceId) = await GetPumpInfoAndTotalsAsync(pumpId, liters, ct);
 
             trx.PumpId = pumpId;
             trx.Liters = liters;
             trx.PricePerLiter = unit;
             trx.TotalPrice = total;
             trx.TimestampUtc = now;
-            trx.StationFuelPriceId = price.Id;
+            trx.StationFuelPriceId = priceId;
 
             await _db.SaveChangesAsync(ct);
             return true;
