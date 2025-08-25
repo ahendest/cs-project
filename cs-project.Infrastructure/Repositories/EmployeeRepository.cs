@@ -22,12 +22,12 @@ namespace cs_project.Infrastructure.Repositories
 
             if (!string.IsNullOrWhiteSpace(query.SearchTerm))
             {
-                string term = query.SearchTerm.ToLower();
+                string term = $"%{query.SearchTerm}%";
                 employees = employees.Where(e =>
-                    e.FirstName.ToLower().Contains(term) ||
-                    e.LastName.ToLower().Contains(term) ||
-                    e.Role.ToString().ToLower().Contains(term) ||
-                    (e.Station != null && e.Station.Name.ToLower().Contains(term)));
+                    EF.Functions.Like(e.FirstName, term) ||
+                    EF.Functions.Like(e.LastName, term) ||
+                    EF.Functions.Like(e.Role.ToString(), term) ||
+                    (e.Station != null && EF.Functions.Like(e.Station.Name, term)));
             }
 
             employees = query.SortBy?.ToLower() switch

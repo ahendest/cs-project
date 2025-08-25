@@ -20,13 +20,13 @@ namespace cs_project.Infrastructure.Repositories
 
             if (!string.IsNullOrWhiteSpace(query.SearchTerm))
             {
-                string term = query.SearchTerm.ToLower();
+                string term = $"%{query.SearchTerm}%";
                 suppliers = suppliers.Where(s =>
-                    s.CompanyName.ToLower().Contains(term) ||
-                    (s.ContactPerson != null && s.ContactPerson.ToLower().Contains(term)) ||
-                    (s.Phone != null && s.Phone.ToLower().Contains(term)) ||
-                    (s.Email != null && s.Email.ToLower().Contains(term)) ||
-                    (s.TaxRegistrationNumber != null && s.TaxRegistrationNumber.ToLower().Contains(term)));
+                    EF.Functions.Like(s.CompanyName, term) ||
+                    (s.ContactPerson != null && EF.Functions.Like(s.ContactPerson, term)) ||
+                    (s.Phone != null && EF.Functions.Like(s.Phone, term)) ||
+                    (s.Email != null && EF.Functions.Like(s.Email, term)) ||
+                    (s.TaxRegistrationNumber != null && EF.Functions.Like(s.TaxRegistrationNumber, term)));
             }
 
             suppliers = query.SortBy?.ToLower() switch

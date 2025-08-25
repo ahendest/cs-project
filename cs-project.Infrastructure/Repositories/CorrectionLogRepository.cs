@@ -20,11 +20,11 @@ namespace cs_project.Infrastructure.Repositories
 
             if (!string.IsNullOrWhiteSpace(query.SearchTerm))
             {
-                var term = query.SearchTerm.ToLower();
+                var term = $"%{query.SearchTerm}%";
                 logs = logs.Where(l =>
-                    l.TargetTable.ToLower().Contains(term) ||
-                    l.Reason.ToLower().Contains(term) ||
-                    l.Type.ToString().ToLower().Contains(term));
+                    EF.Functions.Like(l.TargetTable, term) ||
+                    EF.Functions.Like(l.Reason, term) ||
+                    EF.Functions.Like(l.Type.ToString(), term));
             }
 
             logs = query.SortBy?.ToLower() switch

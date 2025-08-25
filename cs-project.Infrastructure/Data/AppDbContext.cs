@@ -72,8 +72,16 @@ namespace cs_project.Infrastructure.Data
             // ---------- Station ----------
             model.Entity<Station>(e =>
             {
-                e.Property(p => p.Name).HasMaxLength(150).IsRequired();
-                e.Property(p => p.Address).HasMaxLength(250).IsRequired();
+                e.Property(p => p.Name).HasMaxLength(150).IsRequired()
+                    .UseCollation("SQL_Latin1_General_CP1_CI_AS");
+                e.Property(p => p.Address).HasMaxLength(250).IsRequired()
+                    .UseCollation("SQL_Latin1_General_CP1_CI_AS");
+                e.Property(p => p.City).UseCollation("SQL_Latin1_General_CP1_CI_AS");
+                e.Property(p => p.Country).UseCollation("SQL_Latin1_General_CP1_CI_AS");
+                e.HasIndex(p => p.Name);
+                e.HasIndex(p => p.Address);
+                e.HasIndex(p => p.City);
+                e.HasIndex(p => p.Country);
             });
 
             // ---------- Tank ----------
@@ -100,6 +108,10 @@ namespace cs_project.Infrastructure.Data
             {
                 e.HasOne(emp => emp.Station).WithMany(st => st.Employees).HasForeignKey(emp => emp.StationId);
                 e.Property(emp => emp.Role).HasConversion<int>();
+                e.Property(emp => emp.FirstName).UseCollation("SQL_Latin1_General_CP1_CI_AS");
+                e.Property(emp => emp.LastName).UseCollation("SQL_Latin1_General_CP1_CI_AS");
+                e.HasIndex(emp => emp.FirstName);
+                e.HasIndex(emp => emp.LastName);
             });
 
             // ---------- Shift / ShiftEmployee (bridge) ----------
@@ -161,7 +173,17 @@ namespace cs_project.Infrastructure.Data
             // ---------- Supplier ----------
             model.Entity<Supplier>(e =>
             {
-                e.Property(s => s.CompanyName).HasMaxLength(200).IsRequired();
+                e.Property(s => s.CompanyName).HasMaxLength(200).IsRequired()
+                    .UseCollation("SQL_Latin1_General_CP1_CI_AS");
+                e.Property(s => s.ContactPerson).UseCollation("SQL_Latin1_General_CP1_CI_AS");
+                e.Property(s => s.Phone).UseCollation("SQL_Latin1_General_CP1_CI_AS");
+                e.Property(s => s.Email).UseCollation("SQL_Latin1_General_CP1_CI_AS");
+                e.Property(s => s.TaxRegistrationNumber).UseCollation("SQL_Latin1_General_CP1_CI_AS");
+                e.HasIndex(s => s.CompanyName);
+                e.HasIndex(s => s.ContactPerson);
+                e.HasIndex(s => s.Phone);
+                e.HasIndex(s => s.Email);
+                e.HasIndex(s => s.TaxRegistrationNumber);
             });
 
             // ---------- SupplierInvoice (TEMPORAL) ----------
@@ -287,14 +309,22 @@ namespace cs_project.Infrastructure.Data
                     .OnDelete(DeleteBehavior.Restrict);
                 e.HasOne(c => c.ApprovedBy).WithMany().HasForeignKey(c => c.ApprovedById)
                     .OnDelete(DeleteBehavior.Restrict);
+                e.Property(c => c.TargetTable).UseCollation("SQL_Latin1_General_CP1_CI_AS");
+                e.Property(c => c.Reason).UseCollation("SQL_Latin1_General_CP1_CI_AS");
+                e.Property(c => c.Type).HasConversion<int>();
                 e.HasIndex(c => new { c.TargetTable, c.TargetId });
+                e.HasIndex(c => c.Reason);
             });
 
             // ---------- AuditLog (app-level log) ----------
             model.Entity<AuditLog>(e =>
             {
+                e.Property(a => a.TableName).UseCollation("SQL_Latin1_General_CP1_CI_AS");
+                e.Property(a => a.Operation).UseCollation("SQL_Latin1_General_CP1_CI_AS");
                 e.HasIndex(a => a.ModifiedAt);
                 e.HasIndex(a => a.CorrelationId);
+                e.HasIndex(a => a.TableName);
+                e.HasIndex(a => a.Operation);
             });
         }
     }

@@ -19,10 +19,10 @@ namespace cs_project.Infrastructure.Repositories
 
             if (!string.IsNullOrWhiteSpace(query.SearchTerm))
             {
-                string term = query.SearchTerm.ToLower();
+                string term = $"%{query.SearchTerm}%";
                 pumps = pumps.Where(p =>
-                    p.Tank.FuelType.ToString().ToLower().Contains(term) ||
-                    p.Status.ToString().ToLower().Contains(term));
+                    EF.Functions.Like(p.Tank.FuelType.ToString(), term) ||
+                    EF.Functions.Like(p.Status.ToString(), term));
             }
 
             pumps = query.SortBy?.ToLower() switch
