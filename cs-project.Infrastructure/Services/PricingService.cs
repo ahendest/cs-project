@@ -10,10 +10,9 @@ namespace cs_project.Infrastructure.Services
         ISupplierCostRepository costRepo,
         IStationFuelPriceRepository priceRepo) : IPricingService
     {
-
         public async Task<IReadOnlyList<StationFuelPrice>> RepriceStationAsync(int stationId, DateTime? asOfUtc = null, CancellationToken ct = default)
         {
-            var now = asOfUtc ?? DateTime.UtcNow; ;
+            var now = asOfUtc ?? DateTime.UtcNow;
             var fx = await fxRepo.GetLatestUsdToRonAsync(ct) ?? 4.3m;
             var active = await policyRepo.GetActivePoliciesAsync(stationId, now, ct);
 
@@ -34,10 +33,12 @@ namespace cs_project.Infrastructure.Services
             }
             return results;
         }
-        public DateTime now = DateTime.UtcNow; 
 
-        public Task<IReadOnlyList<StationFuelPrice>> GetCurrentPriceAsync(int stationId, CancellationToken ct = default) =>
-            priceRepo.GetCurrentForStationAsync(stationId, now, ct);
+        public Task<IReadOnlyList<StationFuelPrice>> GetCurrentPriceAsync(int stationId, CancellationToken ct = default)
+        {
+            DateTime now = DateTime.UtcNow;
+            return priceRepo.GetCurrentForStationAsync(stationId, now, ct);
+        }
 
         private async Task<StationFuelPrice?> ComputePriceAsync(PricePolicy pol, int stationId, decimal fx, DateTime now, CancellationToken ct)
         {

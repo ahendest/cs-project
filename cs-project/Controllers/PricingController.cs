@@ -1,10 +1,12 @@
 ﻿using cs_project.Core.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace cs_project.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class PricingController(IPricingService pricing) : ControllerBase
     {
         [HttpPost("reprice/{stationId:int}")]

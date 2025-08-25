@@ -46,10 +46,9 @@ namespace cs_project.Infrastructure.Data
             var now = DateTime.UtcNow;
             foreach (var e in ChangeTracker.Entries<BaseEntity>())
             {
-                if (e.State == EntityState.Added)
-                {
-                    e.Property(x => x.CreatedAtUtc).CurrentValue = now;
-                }
+                if (e.State == EntityState.Added) e.Property(x => x.CreatedAtUtc).CurrentValue = now;
+
+                else if (e.State == EntityState.Modified) e.Property(x => x.UpdatedAtUtc).CurrentValue = now;
             }
         }
         protected override void OnModelCreating(ModelBuilder model)
