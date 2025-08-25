@@ -17,7 +17,7 @@ namespace cs_project.Infrastructure.Services
             _mapper = mapper;
         }
 
-        public async Task<PagedResult<StationDTO>> GetStationAsync(PagingQueryParameters query)
+        public async Task<PagedResult<StationDTO>> GetStationAsync(PagingQueryParameters query, CancellationToken ct)
         {
             var (entities, total) = await _stationRepository.QueryStationsAsync(query);
             var dtoList = _mapper.Map<IEnumerable<StationDTO>>(entities);
@@ -31,19 +31,19 @@ namespace cs_project.Infrastructure.Services
             };
         }
 
-        public async Task<IEnumerable<StationDTO>> GetAllStationsAsync()
+        public async Task<IEnumerable<StationDTO>> GetAllStationsAsync(CancellationToken ct)
         {
             var stations = await _stationRepository.GetAllAsync();
             return _mapper.Map<IEnumerable<StationDTO>>(stations);
         }
 
-        public async Task<StationDTO?> GetStationByIdAsync(int id)
+        public async Task<StationDTO?> GetStationByIdAsync(int id, CancellationToken ct)
         {
             var station = await _stationRepository.GetByIdAsync(id);
             return station == null ? null : _mapper.Map<StationDTO>(station);
         }
 
-        public async Task<StationDTO> CreateStationAsync(StationCreateDTO dto)
+        public async Task<StationDTO> CreateStationAsync(StationCreateDTO dto, CancellationToken ct)
         {
             var station = _mapper.Map<Station>(dto);
             await _stationRepository.AddAsync(station);
@@ -51,7 +51,7 @@ namespace cs_project.Infrastructure.Services
             return _mapper.Map<StationDTO>(station);
         }
 
-        public async Task<bool> UpdateStationAsync(int id, StationCreateDTO dto)
+        public async Task<bool> UpdateStationAsync(int id, StationCreateDTO dto, CancellationToken ct)
         {
             var station = await _stationRepository.GetByIdAsync(id);
             if (station == null) return false;
@@ -61,7 +61,7 @@ namespace cs_project.Infrastructure.Services
             return await _stationRepository.SaveChangesAsync();
         }
 
-        public async Task<bool> DeleteStationAsync(int id)
+        public async Task<bool> DeleteStationAsync(int id, CancellationToken ct)
         {
             var station = await _stationRepository.GetByIdAsync(id);
             if (station == null) return false;
