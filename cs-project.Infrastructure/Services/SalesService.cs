@@ -15,7 +15,7 @@ namespace cs_project.Infrastructure.Services
             _db = db;
             _priceRepo = priceRepo;
         }
-        
+
         public async Task<CustomerTransaction> CreateSaleAsync(int pumpId, decimal liters, CancellationToken ct)
         {
             if (liters <= 0) throw new ArgumentOutOfRangeException(nameof(liters));
@@ -48,6 +48,54 @@ namespace cs_project.Infrastructure.Services
             await _db.SaveChangesAsync(ct);
             return trx;
         }
-        
+
+        public async Task<IEnumerable<CustomerTransaction>> GetSalesAsync(CancellationToken ct)
+            => await _db.CustomerTransactions.AsNoTracking().ToListAsync(ct);
+
+        public async Task<CustomerTransaction?> GetSaleByIdAsync(int id, CancellationToken ct)
+            => await _db.CustomerTransactions.AsNoTracking().FirstOrDefaultAsync(t => t.Id == id, ct);
+
+        public async Task<bool> UpdateSaleAsync(int id, int pumpId, decimal liters, CancellationToken ct)
+        {
+            if (liters <= 0) throw new ArgumentOutOfRangeException(nameof(liters));
+
+            var trx = await _db.CustomerTransactions.FirstOrDefaultAsync(t => t.Id == id, ct);
+            if (trx == null) return false;
+
+            var pump = await _db.Pumps.Include(p => p.Tank).ThenInclude(t => t.Station)
+                                      .FirstOrDefaultAsync(p => p.Id == pumpId, ct)
+                        ?? throw new InvalidOperationException("Pump not found");
+
+            var stationId = pump.Tank.StationId;
+            var fuelType = pump.Tank.FuelType;
+            var now = DateTime.UtcNow;
+
+            var price = await _priceRepo.GetCurrentAsync(stationId, fuelType, now, ct)
+                        ?? throw new InvalidOperationException("No published price for station/fuel");
+
+            var unit = price.PriceRon;
+            var total = Math.Round(unit * liters, 2, MidpointRounding.AwayFromZero);
+
+            trx.PumpId = pumpId;
+            trx.Liters = liters;
+            trx.PricePerLiter = unit;
+            trx.TotalPrice = total;
+            trx.TimestampUtc = now;
+            trx.StationFuelPriceId = price.Id;
+
+            await _db.SaveChangesAsync(ct);
+            return true;
+        }
+
+        public async Task<bool> DeleteSaleAsync(int id, CancellationToken ct)
+        {
+            var trx = await _db.CustomerTransactions.FirstOrDefaultAsync(t => t.Id == id, ct);
+            if (trx == null) return false;
+
+            _db.CustomerTransactions.Remove(trx);
+            await _db.SaveChangesAsync(ct);
+            return true;
+        }
     }
 }
+
