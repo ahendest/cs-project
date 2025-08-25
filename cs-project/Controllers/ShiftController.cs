@@ -13,11 +13,13 @@ namespace cs_project.Controllers
     {
         private readonly ILogger<ShiftController> _logger;
         private readonly IShiftService _shiftService;
+        private readonly IShiftEmployeeService _shiftEmployeeService;
 
-        public ShiftController(IShiftService shiftService, ILogger<ShiftController> logger)
+        public ShiftController(IShiftService shiftService, IShiftEmployeeService shiftEmployeeService, ILogger<ShiftController> logger)
         {
             _logger = logger;
             _shiftService = shiftService;
+            _shiftEmployeeService = shiftEmployeeService;
         }
 
         [HttpGet]
@@ -63,6 +65,29 @@ namespace cs_project.Controllers
         {
             var deleted = await _shiftService.DeleteShiftAsync(id);
             return deleted ? NoContent() : NotFound();
+        }
+
+        [HttpGet("{id}/employees")]
+        public async Task<ActionResult<IEnumerable<ShiftEmployeeDTO>>> GetShiftEmployees(int id)
+        {
+            var employees = await _shiftEmployeeService.GetEmployeesByShiftIdAsync(id);
+            return Ok(employees);
+        }
+
+        [HttpPost("{id}/employees")]
+        public async Task<ActionResult<ShiftEmployeeDTO>> AddShiftEmployee(int id, [FromBody] ShiftEmployeeCreateDTO dto)
+        {
+            if (dto.ShiftId != id) dto.ShiftId = id;
+            var result = await _shiftEmployeeService.AddEmployeeToShiftAsync(dto.ShiftId, dto.EmployeeId);
+            if (result == null) return Conflict();
+            return CreatedAtAction(nameof(GetShiftEmployees), new { id }, result);
+        }
+
+        [HttpDelete("{id}/employees/{employeeId}")]
+        public async Task<IActionResult> RemoveShiftEmployee(int id, int employeeId)
+        {
+            var removed = await _shiftEmployeeService.RemoveEmployeeFromShiftAsync(id, employeeId);
+            return removed ? NoContent() : NotFound();
         }
     }
 }

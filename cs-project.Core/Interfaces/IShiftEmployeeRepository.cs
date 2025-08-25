@@ -12,5 +12,7 @@ namespace cs_project.Infrastructure.Repositories
         void Update(ShiftEmployee shiftEmployee);
         void Delete(ShiftEmployee shiftEmployee);
         Task<bool> SaveChangesAsync();
+        Task<IEnumerable<ShiftEmployee>> GetByShiftIdAsync(int shiftId);
+        Task<ShiftEmployee?> GetByShiftAndEmployeeIdAsync(int shiftId, int employeeId);
     }
 }

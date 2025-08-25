@@ -165,6 +165,9 @@ builder.Services.AddScoped<IPricingService, PricingService>();
 builder.Services.AddScoped<IShiftRepository, ShiftRepository>();
 builder.Services.AddScoped<IShiftService, ShiftService>();
 
+builder.Services.AddScoped<IShiftEmployeeRepository, ShiftEmployeeRepository>();
+builder.Services.AddScoped<IShiftEmployeeService, ShiftEmployeeService>();
+
 builder.Services.AddScoped<ISupplierRepository, SupplierRepository>();
 builder.Services.AddScoped<ISupplierService, SupplierService>();
 
