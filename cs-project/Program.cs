@@ -153,6 +153,9 @@ builder.Services.AddAutoMapper(typeof(MappingProfile));
 builder.Services.AddScoped<IPumpRepository, PumpRepository>();
 builder.Services.AddScoped<IPumpService, PumpService>();
 
+builder.Services.AddScoped<ITankRepository, TankRepository>();
+builder.Services.AddScoped<ITankService, TankService>();
+
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 
