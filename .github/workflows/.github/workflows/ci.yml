@@ -1,0 +1,59 @@
+name: CI - build, test, coverage
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+  workflow_dispatch:
+
+jobs:
+  build_test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 9
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0'
+
+      - name: Cache NuGet
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: nuget-${{ runner.os }}-${{ hashFiles('**/*.csproj') }}
+          restore-keys: |
+            nuget-${{ runner.os }}-
+
+      - name: Restore
+        run: dotnet restore cs-project.sln
+
+      - name: Build (Release)
+        run: dotnet build cs-project.sln -c Release --no-restore
+
+      - name: Test with coverage
+        run: >
+          dotnet test cs-project.Tests/cs-project.Tests.csproj
+          -c Release --no-build
+          --collect:"XPlat Code Coverage"
+          --results-directory ./TestResults
+          /p:CollectCoverage=true
+          /p:CoverletOutput=./TestResults/coverage/
+          /p:CoverletOutputFormat=cobertura
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: TestResults
+
+      - name: Upload coverage (Cobertura)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-cobertura
+          path: TestResults/coverage/coverage.cobertura.xml

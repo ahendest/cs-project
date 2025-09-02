@@ -1,0 +1,14 @@
+**/bin
+**/obj
+**/TestResults
+**/coverage
+.git
+.vs
+.vscode
+.idea
+*.user
+*.suo
+*.swp
+.DS_Store
+node_modules
+.env

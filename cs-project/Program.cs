@@ -191,6 +191,7 @@ builder.Services.AddSwaggerGen(options =>
 
 var app = builder.Build();
 
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -199,7 +200,10 @@ if (app.Environment.IsDevelopment())
 
 app.UseSerilogRequestLogging(); 
 
-app.UseHttpsRedirection();
+if (Environment.GetEnvironmentVariable("DISABLE_HTTPS_REDIRECT") != "1")
+{
+    app.UseHttpsRedirection();
+}
 
 app.UseRouting();
 

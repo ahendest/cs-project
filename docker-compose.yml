@@ -1,0 +1,40 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: cs-project/DockerFile
+    env_file: []                               # optional: add a .env path if you keep secrets there
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      # EF Core uses this; Program.cs reads "DefaultConnection"
+      ConnectionStrings__DefaultConnection: "Server=sqldata,1433;Database=csproject;User ID=sa;Password=${SA_PASSWORD};TrustServerCertificate=true;MultipleActiveResultSets=true"
+      Jwt__Key: ${JWT_KEY}
+      Jwt__Issuer: ${JWT_ISSUER}
+      Jwt__Audience: ${JWT_AUDIENCE}
+      AllowedOrigins__0: ${CORS_ORIGINS}
+      DISABLE_HTTPS_REDIRECT: ${DISABLE_HTTPS_REDIRECT} 
+    
+    ports:
+      - "8080:8080"
+    depends_on:
+      sqldata:
+        condition: service_healthy
+
+  sqldata:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: csproject-sql
+    ports:
+      - "1433:1433"
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "Your_password123"          # change in real usage
+    healthcheck:
+      test: ["CMD", "/opt/mssql-tools18/bin/sqlcmd", "-S", "localhost,1433", "-U", "sa", "-P", "Your_password123", "-C", "-Q", "SELECT 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    volumes:
+      - mssql-data:/var/opt/mssql
+
+volumes:
+  mssql-data:
