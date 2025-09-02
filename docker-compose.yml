@@ -1,8 +1,6 @@
 services:
   api:
-    build:
-      context: .
-      dockerfile: cs-project/DockerFile
+    image: ghcr.io/ahendest/cs-project-api:1.0.0
     env_file: []                               # optional: add a .env path if you keep secrets there
     environment:
       ASPNETCORE_ENVIRONMENT: Development
@@ -12,10 +10,15 @@ services:
       Jwt__Issuer: ${JWT_ISSUER}
       Jwt__Audience: ${JWT_AUDIENCE}
       AllowedOrigins__0: ${CORS_ORIGINS}
-      DISABLE_HTTPS_REDIRECT: ${DISABLE_HTTPS_REDIRECT} 
-    
+      DISABLE_HTTPS_REDIRECT: ${DISABLE_HTTPS_REDIRECT}
+
     ports:
       - "8080:8080"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
     depends_on:
       sqldata:
         condition: service_healthy

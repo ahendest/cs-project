@@ -1,8 +1,6 @@
 services:
   api:
-    build:
-      context: .
-      dockerfile: cs-project/DockerFile
+    image: ghcr.io/ahendest/cs-project-api:1.0.0
     environment:
       ASPNETCORE_ENVIRONMENT: Production
       ConnectionStrings__DefaultConnection: "Server=sqldata,1433;Database=csproject;User ID=sa;Password=${SA_PASSWORD};TrustServerCertificate=true;MultipleActiveResultSets=true"
@@ -12,6 +10,11 @@ services:
       AllowedOrigins__0: ${CORS_ORIGINS}
     ports:
       - "8080:8080"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
     depends_on:
       sqldata:
         condition: service_healthy

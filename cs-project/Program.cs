@@ -211,9 +211,11 @@ app.UseMiddleware<cs_project.Middleware.ErrorHandlingMiddleware>();
 
 app.UseCors("FrontendPolicy");
 
-app.UseAuthentication();  
+app.UseAuthentication();
 
 app.UseAuthorization();
+
+app.MapGet("/health", () => "Healthy");
 
 app.MapControllers();
 
