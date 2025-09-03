@@ -1,6 +1,6 @@
 services:
   api:
-    image: ghcr.io/ahendest/cs-project-api:sha-6da2edd
+    image: ghcr.io/ahendest/cs-project-api:1.0.0
     env_file: []                               # optional: add a .env path if you keep secrets there
     environment:
       ASPNETCORE_ENVIRONMENT: Development

@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: cs-project-api
-        image: ghcr.io/ahendest/cs-project-api:sha-a57874c   
+        image: ghcr.io/ahendest/cs-project-api:sha-6da2edd 
         ports:
         - containerPort: 8080
         env:

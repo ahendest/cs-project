@@ -1,6 +1,6 @@
 services:
   api:
-    image: ghcr.io/ahendest/cs-project-api:sha-6da2edd
+    image: ghcr.io/ahendest/cs-project-api:1.0.0
     environment:
       ASPNETCORE_ENVIRONMENT: Development #change after deployment!
       ConnectionStrings__DefaultConnection: "Server=sqldata,1433;Database=csproject;User ID=sa;Password=${SA_PASSWORD};TrustServerCertificate=true;MultipleActiveResultSets=true"

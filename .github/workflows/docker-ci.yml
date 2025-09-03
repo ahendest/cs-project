@@ -24,7 +24,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ghcr.io/ahendest/cs-project-api:sha-6da2edd
+          images: ghcr.io/ahendest/cs-project-api:1.0.0
           tags: |
             type=raw,value=latest,enable={{is_default_branch}}
             type=sha
