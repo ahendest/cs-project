@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cs-project-api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: cs-project-api
+  template:
+    metadata:
+      labels:
+        app: cs-project-api
+    spec:
+      containers:
+      - name: cs-project-api
+        image: ghcr.io/ahendest/cs-project-api:sha-a57874c   
+        ports:
+        - containerPort: 8080
+        env:
+        - name: ASPNETCORE_ENVIRONMENT
+          value: Production
+        - name: ConnectionStrings__DefaultConnection
+          value: "Server=sqldata,1433;Database=csproject;User ID=sa;Password=Your_password123;TrustServerCertificate=true;MultipleActiveResultSets=true"
+        - name: Jwt__Key
+          value: "super-secret"
+        - name: Jwt__Issuer
+          value: "cs-project-api"
+        - name: Jwt__Audience
+          value: "cs-project-client"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cs-project-api-service
+spec:
+  selector:
+    app: cs-project-api
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+  type: LoadBalancer
