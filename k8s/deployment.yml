@@ -19,7 +19,7 @@ spec:
         - containerPort: 8080
         env:
         - name: ASPNETCORE_ENVIRONMENT
-          value: Production
+          value: Development #change after deployment!
         - name: ConnectionStrings__DefaultConnection
           value: "Server=sqldata,1433;Database=csproject;User ID=sa;Password=Your_password123;TrustServerCertificate=true;MultipleActiveResultSets=true"
         - name: Jwt__Key
