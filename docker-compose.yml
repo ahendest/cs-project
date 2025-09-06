@@ -1,8 +1,9 @@
 services:
   api:
     image: ghcr.io/ahendest/cs-project-api
-    env_file: []                               # optional: add a .env path if you keep secrets there
+    env_file: []                              
     environment:
+      ASPNETCORE_URLS: http://+:8080
       ASPNETCORE_ENVIRONMENT: Development
       # EF Core uses this; Program.cs reads "DefaultConnection"
       ConnectionStrings__DefaultConnection: "Server=sqldata,1433;Database=csproject;User ID=sa;Password=${SA_PASSWORD};TrustServerCertificate=true;MultipleActiveResultSets=true"
@@ -15,7 +16,7 @@ services:
     ports:
       - "8080:8080"
     healthcheck:
-      test: ["CMD", "curl", "-f", "https://localhost:8080/health"]
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
       interval: 30s
       timeout: 10s
       retries: 5
@@ -32,7 +33,7 @@ services:
       ACCEPT_EULA: "Y"
       SA_PASSWORD: ${SA_PASSWORD}
     healthcheck:
-      test: ["CMD", "/opt/mssql-tools18/bin/sqlcmd", "-S", "localhost,1433", "-U", "sa", "-P", "Your_password123", "-C", "-Q", "SELECT 1"]
+      test: ["CMD", "/opt/mssql-tools18/bin/sqlcmd", "-S", "localhost,1433", "-U", "sa", "-P", "${SA_PASSWORD}", "-C", "-Q", "SELECT 1"]
       interval: 10s
       timeout: 5s
       retries: 10
