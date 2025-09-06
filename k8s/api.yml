@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cs-project-api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: cs-project-api
+  template:
+    metadata:
+      labels:
+        app: cs-project-api
+    spec:
+      containers:
+      - name: cs-project-api
+        image: ghcr.io/ahendest/cs-project-api:1.0.0  # or your local tag if you prefer
+        ports:
+        - containerPort: 8080
+        env:
+        - name: ASPNETCORE_ENVIRONMENT
+          value: Development
+        - name: ConnectionStrings__DefaultConnection
+          valueFrom:
+            secretKeyRef:
+              name: api-conn
+              key: DefaultConnection
+        - name: Jwt__Key
+          value: "super-secret"           # you can move these to secrets too
+        - name: Jwt__Issuer
+          value: "cs-project-api"
+        - name: Jwt__Audience
+          value: "cs-project-client"
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 15
+          periodSeconds: 20
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cs-project-api-service
+spec:
+  selector:
+    app: cs-project-api
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+  type: LoadBalancer   # keep; we'll use port-forward on kind
