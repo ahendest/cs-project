@@ -17,6 +17,14 @@ spec:
         image: ghcr.io/ahendest/cs-project-api
         ports:
         - containerPort: 8080
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "256Mi"
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+  
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: Development
