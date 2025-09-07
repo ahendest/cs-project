@@ -3,7 +3,6 @@ kind: Deployment
 metadata:
   name: cs-project-api
 spec:
-  replicas: 2
   selector:
     matchLabels:
       app: cs-project-api
