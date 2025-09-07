@@ -19,15 +19,24 @@ spec:
         - containerPort: 8080
         env:
         - name: ASPNETCORE_ENVIRONMENT
-          value: Development #change after deployment!
+          value: Production
         - name: ConnectionStrings__DefaultConnection
           value: "Server=sqldata,1433;Database=csproject;User ID=sa;Password=${SA_PASSWORD};TrustServerCertificate=true;MultipleActiveResultSets=true"
         - name: Jwt__Key
-          value: "super-secret"
+          valueFrom:
+            secretKeyRef:
+              name: jwt-secret
+              key: Jwt__Key
         - name: Jwt__Issuer
-          value: "cs-project-api"
+          valueFrom:
+            secretKeyRef:
+              name: jwt-secret
+              key: Jwt__Issuer
         - name: Jwt__Audience
-          value: "cs-project-client"
+          valueFrom:
+            secretKeyRef:
+              name: jwt-secret
+              key: Jwt__Audience
 
 ---
 apiVersion: v1

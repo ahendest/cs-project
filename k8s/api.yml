@@ -27,18 +27,27 @@ spec:
   
         env:
         - name: ASPNETCORE_ENVIRONMENT
-          value: Development
+          value: Production
         - name: ConnectionStrings__DefaultConnection
           valueFrom:
             secretKeyRef:
               name: api-conn
               key: DefaultConnection
         - name: Jwt__Key
-          value: "super-secret"           # you can move these to secrets too
+          valueFrom:
+            secretKeyRef:
+              name: jwt-secret
+              key: Jwt__Key
         - name: Jwt__Issuer
-          value: "cs-project-api"
+          valueFrom:
+            secretKeyRef:
+              name: jwt-secret
+              key: Jwt__Issuer
         - name: Jwt__Audience
-          value: "cs-project-client"
+          valueFrom:
+            secretKeyRef:
+              name: jwt-secret
+              key: Jwt__Audience
         readinessProbe:
           httpGet:
             path: /health
