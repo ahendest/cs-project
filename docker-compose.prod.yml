@@ -2,7 +2,7 @@ services:
   api:
     image: ghcr.io/ahendest/cs-project-api
     environment:
-      ASPNETCORE_ENVIRONMENT: Development #change after deployment!
+      ASPNETCORE_ENVIRONMENT: Production
       ConnectionStrings__DefaultConnection: "Server=sqldata,1433;Database=csproject;User ID=csapp;Password=${CSAPP_PASSWORD};TrustServerCertificate=true;MultipleActiveResultSets=true"
       Jwt__Key: ${JWT_KEY}
       Jwt__Issuer: ${JWT_ISSUER}

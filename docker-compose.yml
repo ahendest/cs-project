@@ -4,7 +4,7 @@ services:
     env_file: []                              
     environment:
       ASPNETCORE_URLS: http://+:8080
-      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_ENVIRONMENT: Production
       # EF Core uses this; Program.cs reads "DefaultConnection"
       ConnectionStrings__DefaultConnection: "Server=sqldata,1433;Database=csproject;User ID=csapp;Password=${CSAPP_PASSWORD};TrustServerCertificate=true;MultipleActiveResultSets=true"
       Jwt__Key: ${JWT_KEY}
