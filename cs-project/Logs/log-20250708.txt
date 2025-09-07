@@ -1,5 +1,0 @@
-2025-07-08 15:29:14.498 +03:00 [INF] /api/Auth/login 200 in 204.0747 ms HTTP POST /api/Auth/login responded 200 in 204.0747 ms
-2025-07-08 15:29:34.221 +03:00 [INF] /api/Health 200 in 920.7990 ms HTTP GET /api/Health responded 200 in 920.7990 ms
-2025-07-08 15:29:41.718 +03:00 [INF] /api/Pumps 200 in 402.6290 ms HTTP GET /api/Pumps responded 200 in 402.6290 ms
-2025-07-08 15:29:47.666 +03:00 [INF] /healthz 200 in 28.8714 ms HTTP GET /healthz responded 200 in 28.8714 ms
-2025-07-08 15:29:47.827 +03:00 [INF] /favicon.ico 404 in 0.7697 ms HTTP GET /favicon.ico responded 404 in 0.7697 ms
