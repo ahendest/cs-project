@@ -1,0 +1,13 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../base
+
+replicas:
+  - name: cs-project-api
+    count: 3
+
+patches:
+  - path: api-secret-patch.yaml
+  - path: jwt-secret-patch.yaml
