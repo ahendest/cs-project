@@ -2,24 +2,18 @@ using cs_project.Core.Entities;
 using cs_project.Infrastructure.Data;
 using cs_project.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
+using cs_project.Tests.Common;
 
 namespace cs_project.Tests.Repositories;
 
 public class StationRepositoryTests
 {
-    private static AppDbContext CreateContext()
-    {
-        var options = new DbContextOptionsBuilder<AppDbContext>()
-            .UseInMemoryDatabase(Guid.NewGuid().ToString()).Options;
-        var ctx = new AppDbContext(options);
-        ctx.Database.EnsureCreated();
-        return ctx;
-    }
+    private static AppDbContext CreateContext() => TestDbContextFactory.CreateContext();
 
     [Fact]
     public async Task AddAndFetchStation_Works()
     {
-        using var ctx = CreateContext();
+        await using var ctx = CreateContext();
         var repo = new StationRepository(ctx);
         var station = new Station { Id = 1, Name = "Main", Address = "Addr" };
 
@@ -34,7 +28,7 @@ public class StationRepositoryTests
     [Fact]
     public async Task UpdateStation_PersistsChanges()
     {
-        using var ctx = CreateContext();
+        await using var ctx = CreateContext();
         var repo = new StationRepository(ctx);
         var station = new Station { Id = 1, Name = "Main", Address = "Addr" };
         await repo.AddAsync(station);
@@ -51,7 +45,7 @@ public class StationRepositoryTests
     [Fact]
     public async Task DeleteStation_RemovesEntity()
     {
-        using var ctx = CreateContext();
+        await using var ctx = CreateContext();
         var repo = new StationRepository(ctx);
         var station = new Station { Id = 1, Name = "Main", Address = "Addr" };
         await repo.AddAsync(station);
@@ -67,7 +61,7 @@ public class StationRepositoryTests
     [Fact]
     public async Task GetById_Missing_ReturnsNull()
     {
-        using var ctx = CreateContext();
+        await using var ctx = CreateContext();
         var repo = new StationRepository(ctx);
         var fetched = await repo.GetByIdAsync(123);
         Assert.Null(fetched);
@@ -76,7 +70,7 @@ public class StationRepositoryTests
     [Fact]
     public async Task AddStation_MissingName_Throws()
     {
-        using var ctx = CreateContext();
+        await using var ctx = CreateContext();
         var repo = new StationRepository(ctx);
         var station = new Station { Id = 1, Name = null!, Address = "Addr" };
         await repo.AddAsync(station);

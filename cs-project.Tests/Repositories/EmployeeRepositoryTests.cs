@@ -4,34 +4,23 @@ using cs_project.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using static cs_project.Core.Entities.Enums;
 using System.Threading;
+using System.Threading.Tasks;
+using cs_project.Tests.Common;
 
 namespace cs_project.Tests.Repositories;
 
 public class EmployeeRepositoryTests
 {
-    private static AppDbContext CreateContext()
-    {
-        var options = new DbContextOptionsBuilder<AppDbContext>()
-            .UseInMemoryDatabase(Guid.NewGuid().ToString()).Options;
-        var ctx = new AppDbContext(options);
-        ctx.Database.EnsureCreated();
-        return ctx;
-    }
+    private static AppDbContext CreateContext() => TestDbContextFactory.CreateContext();
 
-    private static Station SeedStation(AppDbContext ctx)
-    {
-        var station = new Station { Id = 1, Name = "Main", Address = "Addr" };
-        ctx.Stations.Add(station);
-        ctx.SaveChanges();
-        return station;
-    }
+    private static Task<Station> SeedStationAsync(AppDbContext ctx) => TestDbContextFactory.SeedStationAsync(ctx);
 
     [Fact]
     public async Task AddAndFetchEmployee_Works()
     {
-        using var ctx = CreateContext();
+        await using var ctx = CreateContext();
         var repo = new EmployeeRepository(ctx);
-        var station = SeedStation(ctx);
+        var station = await SeedStationAsync(ctx);
         var employee = new Employee
         {
             Id = 1,
@@ -53,9 +42,9 @@ public class EmployeeRepositoryTests
     [Fact]
     public async Task UpdateEmployee_PersistsChanges()
     {
-        using var ctx = CreateContext();
+        await using var ctx = CreateContext();
         var repo = new EmployeeRepository(ctx);
-        var station = SeedStation(ctx);
+        var station = await SeedStationAsync(ctx);
         var employee = new Employee
         {
             Id = 1,
@@ -79,9 +68,9 @@ public class EmployeeRepositoryTests
     [Fact]
     public async Task DeleteEmployee_RemovesEntity()
     {
-        using var ctx = CreateContext();
+        await using var ctx = CreateContext();
         var repo = new EmployeeRepository(ctx);
-        var station = SeedStation(ctx);
+        var station = await SeedStationAsync(ctx);
         var employee = new Employee
         {
             Id = 1,
@@ -104,7 +93,7 @@ public class EmployeeRepositoryTests
     [Fact]
     public async Task GetById_Missing_ReturnsNull()
     {
-        using var ctx = CreateContext();
+        await using var ctx = CreateContext();
         var repo = new EmployeeRepository(ctx);
         var fetched = await repo.GetByIdAsync(999, CancellationToken.None);
         Assert.Null(fetched);
@@ -113,7 +102,7 @@ public class EmployeeRepositoryTests
     [Fact]
     public async Task AddEmployee_MissingNames_Throws()
     {
-        using var ctx = CreateContext();
+        await using var ctx = CreateContext();
         var repo = new EmployeeRepository(ctx);
         var employee = new Employee
         {
