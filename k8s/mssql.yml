@@ -12,6 +12,9 @@ spec:
       labels:
         app: mssql
     spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
       containers:
       - name: mssql
         image: mcr.microsoft.com/mssql/server:2022-latest
@@ -25,6 +28,10 @@ spec:
             secretKeyRef:
               name: mssql-secret
               key: SA_PASSWORD
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
         volumeMounts:
         - name: mssql-data
           mountPath: /var/opt/mssql
