@@ -6,7 +6,7 @@ services:
       ASPNETCORE_URLS: http://+:8080
       ASPNETCORE_ENVIRONMENT: Development
       # EF Core uses this; Program.cs reads "DefaultConnection"
-      ConnectionStrings__DefaultConnection: "Server=sqldata,1433;Database=csproject;User ID=sa;Password=${SA_PASSWORD};TrustServerCertificate=true;MultipleActiveResultSets=true"
+      ConnectionStrings__DefaultConnection: "Server=sqldata,1433;Database=csproject;User ID=csapp;Password=${CSAPP_PASSWORD};TrustServerCertificate=true;MultipleActiveResultSets=true"
       Jwt__Key: ${JWT_KEY}
       Jwt__Issuer: ${JWT_ISSUER}
       Jwt__Audience: ${JWT_AUDIENCE}
