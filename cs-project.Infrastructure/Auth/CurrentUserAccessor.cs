@@ -7,13 +7,12 @@ namespace cs_project.Infrastructure.Auth
     {
         private readonly IHttpContextAccessor _http = http;
 
-        public long GetCurrentUserId()
+        public string? GetCurrentUserId()
         {
             var user = _http.HttpContext?.User;
-            if (user == null || !user.Identity?.IsAuthenticated == true) return 0;
+            if (user == null || !user.Identity?.IsAuthenticated == true) return null;
 
-            var id = user.FindFirst("sub")?.Value ?? user.FindFirst("userid")?.Value;
-            return long.TryParse(id, out var lid) ? lid : 0;
+            return user.FindFirst("sub")?.Value ?? user.FindFirst("userid")?.Value;
         }
     }
 }

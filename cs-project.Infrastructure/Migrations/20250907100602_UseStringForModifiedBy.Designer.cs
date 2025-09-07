@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using cs_project.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using cs_project.Infrastructure.Data;
 namespace cs_project.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250907100602_UseStringForModifiedBy")]
+    partial class UseStringForModifiedBy
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -246,26 +249,20 @@ namespace cs_project.Infrastructure.Migrations
 
                     b.Property<string>("Operation")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)")
-                        .UseCollation("SQL_Latin1_General_CP1_CI_AS");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<long>("RecordId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("TableName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)")
-                        .UseCollation("SQL_Latin1_General_CP1_CI_AS");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CorrelationId");
 
                     b.HasIndex("ModifiedAt");
-
-                    b.HasIndex("Operation");
-
-                    b.HasIndex("TableName");
 
                     b.ToTable("AuditLogs");
                 });
@@ -295,8 +292,7 @@ namespace cs_project.Infrastructure.Migrations
 
                     b.Property<string>("Reason")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)")
-                        .UseCollation("SQL_Latin1_General_CP1_CI_AS");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("RequestedAtUtc")
                         .HasColumnType("datetime2");
@@ -316,8 +312,7 @@ namespace cs_project.Infrastructure.Migrations
 
                     b.Property<string>("TargetTable")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)")
-                        .UseCollation("SQL_Latin1_General_CP1_CI_AS");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("Type")
                         .HasColumnType("int");
@@ -332,8 +327,6 @@ namespace cs_project.Infrastructure.Migrations
                     b.HasIndex("CreatedAtUtc");
 
                     b.HasIndex("IsActive");
-
-                    b.HasIndex("Reason");
 
                     b.HasIndex("RequestedById");
 
@@ -503,8 +496,7 @@ namespace cs_project.Infrastructure.Migrations
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)")
-                        .UseCollation("SQL_Latin1_General_CP1_CI_AS");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("HireDateUtc")
                         .HasColumnType("datetime2");
@@ -514,8 +506,7 @@ namespace cs_project.Infrastructure.Migrations
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)")
-                        .UseCollation("SQL_Latin1_General_CP1_CI_AS");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Role")
                         .HasColumnType("int");
@@ -537,11 +528,7 @@ namespace cs_project.Infrastructure.Migrations
 
                     b.HasIndex("CreatedAtUtc");
 
-                    b.HasIndex("FirstName");
-
                     b.HasIndex("IsActive");
-
-                    b.HasIndex("LastName");
 
                     b.HasIndex("StationId");
 
@@ -904,16 +891,13 @@ namespace cs_project.Infrastructure.Migrations
                     b.Property<string>("Address")
                         .IsRequired()
                         .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)")
-                        .UseCollation("SQL_Latin1_General_CP1_CI_AS");
+                        .HasColumnType("nvarchar(250)");
 
                     b.Property<string>("City")
-                        .HasColumnType("nvarchar(450)")
-                        .UseCollation("SQL_Latin1_General_CP1_CI_AS");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Country")
-                        .HasColumnType("nvarchar(450)")
-                        .UseCollation("SQL_Latin1_General_CP1_CI_AS");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedAtUtc")
                         .HasColumnType("datetime2");
@@ -924,8 +908,7 @@ namespace cs_project.Infrastructure.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)")
-                        .UseCollation("SQL_Latin1_General_CP1_CI_AS");
+                        .HasColumnType("nvarchar(150)");
 
                     b.Property<byte[]>("RowVersion")
                         .IsConcurrencyToken()
@@ -939,17 +922,9 @@ namespace cs_project.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Address");
-
-                    b.HasIndex("City");
-
-                    b.HasIndex("Country");
-
                     b.HasIndex("CreatedAtUtc");
 
                     b.HasIndex("IsActive");
-
-                    b.HasIndex("Name");
 
                     b.ToTable("Stations");
                 });
@@ -965,26 +940,22 @@ namespace cs_project.Infrastructure.Migrations
                     b.Property<string>("CompanyName")
                         .IsRequired()
                         .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)")
-                        .UseCollation("SQL_Latin1_General_CP1_CI_AS");
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("ContactPerson")
-                        .HasColumnType("nvarchar(450)")
-                        .UseCollation("SQL_Latin1_General_CP1_CI_AS");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedAtUtc")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
-                        .HasColumnType("nvarchar(450)")
-                        .UseCollation("SQL_Latin1_General_CP1_CI_AS");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
                     b.Property<string>("Phone")
-                        .HasColumnType("nvarchar(450)")
-                        .UseCollation("SQL_Latin1_General_CP1_CI_AS");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<byte[]>("RowVersion")
                         .IsConcurrencyToken()
@@ -994,27 +965,16 @@ namespace cs_project.Infrastructure.Migrations
                         .HasColumnName("RowVersion");
 
                     b.Property<string>("TaxRegistrationNumber")
-                        .HasColumnType("nvarchar(450)")
-                        .UseCollation("SQL_Latin1_General_CP1_CI_AS");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("UpdatedAtUtc")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CompanyName");
-
-                    b.HasIndex("ContactPerson");
-
                     b.HasIndex("CreatedAtUtc");
 
-                    b.HasIndex("Email");
-
                     b.HasIndex("IsActive");
-
-                    b.HasIndex("Phone");
-
-                    b.HasIndex("TaxRegistrationNumber");
 
                     b.ToTable("Suppliers");
                 });

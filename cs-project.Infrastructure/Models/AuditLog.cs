@@ -19,7 +19,7 @@ public partial class AuditLog
 
     public string NewValues { get; set; }
 
-    public long ModifiedBy { get; set; }
+    public string ModifiedBy { get; set; }
 
     public DateTimeOffset ModifiedAt { get; set; }
 

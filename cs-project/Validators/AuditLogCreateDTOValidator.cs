@@ -15,7 +15,9 @@ public class AuditLogCreateDTOValidator : AbstractValidator<AuditLogCreateDTO>
             .NotEmpty().WithMessage("Operation is required.")
             .MaximumLength(50);
         RuleFor(x => x.ModifiedBy)
-            .GreaterThan(0);
+            .NotEmpty()
+            .Must(id => Guid.TryParse(id, out _))
+            .WithMessage("ModifiedBy must be a valid GUID.");
         RuleFor(x => x.ModifiedAt)
             .NotEmpty();
     }

@@ -27,7 +27,7 @@ namespace cs_project.Infrastructure.Data.Auditing
             try
             {
                 _isSaving = true;
-                var userId = _userAccessor.GetCurrentUserId();
+                var userId = _userAccessor.GetCurrentUserId() ?? string.Empty;
                 var correlationId = Guid.NewGuid();
                 var logs = new List<AuditLog>();
 
@@ -56,7 +56,7 @@ namespace cs_project.Infrastructure.Data.Auditing
             entry.State is EntityState.Added or EntityState.Modified or EntityState.Deleted &&
             entry.Entity is not AuditLog;
 
-        private static AuditLog CreateAuditLog(EntityEntry entry, long userId, Guid correlationId)
+        private static AuditLog CreateAuditLog(EntityEntry entry, string userId, Guid correlationId)
         {
             var audit = new AuditLog
             {

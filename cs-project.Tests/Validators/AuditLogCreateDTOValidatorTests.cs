@@ -14,7 +14,7 @@ public class AuditLogCreateDTOValidatorTests
             TableName = "Users",
             RecordId = 1,
             Operation = "Insert",
-            ModifiedBy = 1,
+            ModifiedBy = Guid.NewGuid().ToString(),
             ModifiedAt = DateTimeOffset.UtcNow
         };
 
@@ -32,7 +32,7 @@ public class AuditLogCreateDTOValidatorTests
             TableName = "",
             RecordId = 0,
             Operation = "",
-            ModifiedBy = 0,
+            ModifiedBy = "not-a-guid",
             ModifiedAt = default
         };
 
@@ -42,7 +42,7 @@ public class AuditLogCreateDTOValidatorTests
         Assert.Contains(result.Errors, x => x.PropertyName == "TableName" && x.ErrorMessage.Contains("required"));
         Assert.Contains(result.Errors, x => x.PropertyName == "RecordId" && x.ErrorMessage.Contains("greater than"));
         Assert.Contains(result.Errors, x => x.PropertyName == "Operation" && x.ErrorMessage.Contains("required"));
-        Assert.Contains(result.Errors, x => x.PropertyName == "ModifiedBy" && x.ErrorMessage.Contains("greater than"));
+        Assert.Contains(result.Errors, x => x.PropertyName == "ModifiedBy" && x.ErrorMessage.Contains("valid GUID"));
         Assert.Contains(result.Errors, x => x.PropertyName == "ModifiedAt" && x.ErrorMessage.Contains("not be empty"));
     }
 }
