@@ -2,24 +2,18 @@ using cs_project.Core.Entities;
 using cs_project.Infrastructure.Data;
 using cs_project.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
+using cs_project.Tests.Common;
 
 namespace cs_project.Tests.Repositories;
 
 public class SupplierRepositoryTests
 {
-    private static AppDbContext CreateContext()
-    {
-        var options = new DbContextOptionsBuilder<AppDbContext>()
-            .UseInMemoryDatabase(Guid.NewGuid().ToString()).Options;
-        var ctx = new AppDbContext(options);
-        ctx.Database.EnsureCreated();
-        return ctx;
-    }
+    private static AppDbContext CreateContext() => TestDbContextFactory.CreateContext();
 
     [Fact]
     public async Task AddAndFetchSupplier_Works()
     {
-        using var ctx = CreateContext();
+        await using var ctx = CreateContext();
         var repo = new SupplierRepository(ctx);
         var supplier = new Supplier { Id = 1, CompanyName = "Acme" };
 
@@ -34,7 +28,7 @@ public class SupplierRepositoryTests
     [Fact]
     public async Task UpdateSupplier_PersistsChanges()
     {
-        using var ctx = CreateContext();
+        await using var ctx = CreateContext();
         var repo = new SupplierRepository(ctx);
         var supplier = new Supplier { Id = 1, CompanyName = "Acme" };
         await repo.AddAsync(supplier);
@@ -51,7 +45,7 @@ public class SupplierRepositoryTests
     [Fact]
     public async Task DeleteSupplier_RemovesEntity()
     {
-        using var ctx = CreateContext();
+        await using var ctx = CreateContext();
         var repo = new SupplierRepository(ctx);
         var supplier = new Supplier { Id = 1, CompanyName = "Acme" };
         await repo.AddAsync(supplier);
@@ -67,7 +61,7 @@ public class SupplierRepositoryTests
     [Fact]
     public async Task GetById_Missing_ReturnsNull()
     {
-        using var ctx = CreateContext();
+        await using var ctx = CreateContext();
         var repo = new SupplierRepository(ctx);
         var fetched = await repo.GetByIdAsync(123);
         Assert.Null(fetched);
@@ -76,7 +70,7 @@ public class SupplierRepositoryTests
     [Fact]
     public async Task AddSupplier_MissingCompanyName_Throws()
     {
-        using var ctx = CreateContext();
+        await using var ctx = CreateContext();
         var repo = new SupplierRepository(ctx);
         var supplier = new Supplier { Id = 1, CompanyName = null! };
         await repo.AddAsync(supplier);
