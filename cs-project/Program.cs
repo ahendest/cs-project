@@ -13,8 +13,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Serilog;
 using System.Text;
+using System.Text.Json;
 using Microsoft.Extensions.Options;
 
 
@@ -160,6 +163,8 @@ builder.Services.AddBusinessServices();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddHealthChecks()
+    .AddDbContextCheck<AppDbContext>();
 
 builder.Services.AddSwaggerGen(options =>
 {
@@ -215,7 +220,32 @@ app.UseAuthentication();
 
 app.UseAuthorization();
 
-app.MapGet("/health", () => "Healthy");
+var healthCheckOptions = new HealthCheckOptions
+{
+    ResponseWriter = async (context, report) =>
+    {
+        if (report.Status != HealthStatus.Healthy)
+        {
+            var logger = context.RequestServices.GetRequiredService<ILogger<Program>>();
+            logger.LogError("Health check failure: {Status}", report.Status);
+        }
+
+        context.Response.ContentType = "application/json";
+        var result = JsonSerializer.Serialize(new
+        {
+            status = report.Status.ToString(),
+            checks = report.Entries.Select(e => new
+            {
+                name = e.Key,
+                status = e.Value.Status.ToString(),
+                exception = e.Value.Exception?.Message
+            })
+        });
+        await context.Response.WriteAsync(result);
+    }
+};
+
+app.MapHealthChecks("/health", healthCheckOptions);
 
 app.MapControllers();
 
